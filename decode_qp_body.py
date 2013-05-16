@@ -1,14 +1,12 @@
+from bs4 import BeautifulSoup
 import quopri
 import json
 import os, errno
 
-HOME = "/Users"
-USER = "raymond"
-DIR = "Projects/semantix"
 FILE = "cpk.txt"
 OUTPUT = "out.txt"
 
-file = open("/".join([HOME, USER, DIR, FILE]), 'r')
+file = open(FILE, 'r')
 
 #just a string
 line1 = file.readlines()
@@ -22,11 +20,12 @@ decoded_qp = quopri.decodestring(body)
 
 #remove the file if exists
 try:
-    os.remove("/".join([HOME, USER, DIR, OUTPUT]))
+    os.remove(OUTPUT)
 except OSError:
     pass
 
 #write decoded body to output file
-out_file = open("/".join([HOME, USER, DIR, OUTPUT]), 'w')
+out_file = open( OUTPUT, 'w')
+soup = BeautifulSoup(decoded_qp)
 out_file.write(decoded_qp)
 out_file.close()
