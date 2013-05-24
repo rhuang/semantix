@@ -25,6 +25,53 @@ inputFile = open(INPUT_FILE, 'r')
 # Read the file contents.
 lines = inputFile.readlines()
 
+
+def printLocations(soup):
+    title = soup.title
+    if title is not None:
+        if "location" in str(title):
+            print "found keyword location at " + str(title)
+            r = re.compile(r'location', re.IGNORECASE)
+        
+            def locationCheck(tag):
+                locationCheck = False
+                #print "\n"
+                #print tag.attrs
+                for key in dict(tag.attrs):
+                    #print key, "corresponds to ", tag[key]
+                    # look in keys for keyword location
+                    if key.find("location") != -1:
+                        locationCheck = True
+
+                    #look in values for keyword location
+                    # since values could be a list, iteration may be needed
+                    #print "type of val is" + str(type(tag[key]))
+                    if type(tag[key]) is unicode:
+                        #print str(tag[key]) + "and"
+                        if str(tag[key]).find("location") != -1:
+                            locationCheck = True
+                    else:
+                        if any("location" in s for s in tag[key]):
+                            locationCheck = True
+                #print locationCheck
+                return locationCheck
+
+            locationTags = soup.find_all(locationCheck)
+
+            if locationTags:
+                print "____Location Tags_____\n"
+                print len(locationTags)
+
+                for locationTag in locationTags:
+                    pattern = re.compile(r'\t+')
+                    output = re.sub(pattern, '', str(locationTag))
+                    print output
+                    print "___________________________________________________________ "
+                    print "\n"
+
+            print "_____End Location tags____\n"
+
+
 # Loop through each line in the file.
 index = 0
 
@@ -38,62 +85,13 @@ for line in lines:
     # Use the quopri module to decode the qp_encoded value of each page.
     decodedQP = quopri.decodestring(body)
     soup = BeautifulSoup(decodedQP)
-
-    # the title may have location
-    title = soup.title
-
-    if title is not None:
-    	if "location" in str(title):
-    		print "found keyword location at " + str(title)
-	    	r = re.compile(r'location',re.IGNORECASE)
-	    	locationAnchorTags = soup.find_all("a", text=r)
-	    	locationSpanTags = soup.find_all("span", text=r)
-	    	locationDivTags = soup.find_all("div", id=r)
-	    	locationParaTags = soup.find_all("p", text=r)
-	    	
-	    	if locationAnchorTags:
-	    		print "____Anchor tags_____\n"
-	    		for locationAnchorTag in locationAnchorTags:
-	    			print str(locationAnchorTag).strip()
-	    			for descendant in locationAnchorTag.descendants:
-	    				pattern = re.compile(r'\s+')
-	    				output = re.sub(pattern, '', str(descendant))
-	    				print output
-	    		print "____End anchor tags_____\n"
-
-	    	if locationSpanTags:
-	    		for locationSpanTag in locationSpanTags:
-	    			pattern = re.compile(r'\s+')
-	    			output = re.sub(pattern, '', str(locationSpanTag))
-	    			print output
-	    			print "\n"
-
-	    	if locationDivTags:
-	    		print "____Div Tags_____\n"
-	    		print len(locationAnchorTags)
-	    		for locationDivTag in locationDivTags:
-	    			pattern = re.compile(r'\t+')
-	    			output = re.sub(pattern, '', str(locationDivTag))
-	    			print output + "\n"
-                    
-	    			#for descendant in locationDivTag.descendants:
-	    				#if descendant is not None:
-	    				#	print " 	" + str(descendant)
-
-	    		print "_____End Div tags____\n"
-
-	    	if locationParaTags:
-	    		for locationParaTag in locationParaTags:
-	    			pattern = re.compile(r'\s+')
-	    			#print str(locationParaTag).sub(pattern, '', str(locationParaTag))
-	    			output = re.sub(pattern, '', str(locationParaTag))
-	    			print output
-	    		print "\n"
+    printLocations(soup)
 
     # Write decoded values to the output file.
 
     outFile = open(OUTPUT_FILE, 'a')
     outFile.write(decodedQP)
-    
     outFile.write("\n")
     outFile.close()
+
+
