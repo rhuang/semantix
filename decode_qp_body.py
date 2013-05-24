@@ -4,6 +4,7 @@ import quopri
 import json
 import os, errno
 import sys
+import requests
 from address import AddressParser, Address
 
 # set default encoding to utf to avoid conflicts with weird symbols
@@ -26,7 +27,6 @@ inputFile = open(INPUT_FILE, 'r')
 # Read the file contents.
 lines = inputFile.readlines()
 
-
 def printLocations(soup):
     title = soup.title
     if title is not None:
@@ -36,25 +36,16 @@ def printLocations(soup):
         
             def locationCheck(tag):
                 locationCheck = False
-                #print "\n"
-                #print tag.attrs
                 for key in dict(tag.attrs):
-                    #print key, "corresponds to ", tag[key]
-                    # look in keys for keyword location
                     if key.find("location") != -1:
                         locationCheck = True
 
-                    # look in values for keyword location
-                    # since values could be a list, iteration may be needed
-                    # print "type of val is" + str(type(tag[key]))
                     if type(tag[key]) is unicode:
-                        #print str(tag[key]) + "and"
                         if str(tag[key]).find('location') != -1:
                             locationCheck = True
                     else:
                         if any('location' in s for s in tag[key]):
                             locationCheck = True
-                #print locationCheck
                 return locationCheck
 
             locationTags = soup.find_all(locationCheck)
@@ -63,44 +54,135 @@ def printLocations(soup):
                 print "____Location Tags_____\n"
                 print len(locationTags)
 
-                #def extractTag(tag):
-                 #   for key in dict(tag.attrs):
+                addressParser = AddressParser()
 
-                ap = AddressParser()
-
+                list_of_addresses = []
+                
+#GETS ADDRESSES --------------------------------------------------------------------------------
+                index = 0
+                end = len(locationTags)
                 for locationTag in locationTags:
                     locationSoup = BeautifulSoup(str(locationTag))
                     allText = locationSoup.find_all(text = True)
-                    for text in allText:
+                    for locationText in allText:
                         pattern = re.compile(r'\t+')
-                        output = re.sub(pattern, '', str(text))
-
+                        #output = re.sub(pattern, '', locationText)
+                        
+                        
                         address = "cannot find"
                         try:
-                            address = str(ap.parse_address(output))
+                            
+                            #print "output: " + output
+                            
+                            #print " +++++++++++++++++++++++++++++++++++++++"
+                        
+                            address = addressParser.parse_address(output).full_address()
+                            #address += " Califonia Pizza Kitchen"
+                            
+                            #print "address: " + address
+                            '''if full_address is not None:
+                                print "full_address: " + full_address
+                            
+                            
+                            print "-----------------------------------------------"   
+                            
+                            house_number = addressParser.parse_address(output).house_number
+                            if house_number is not None:
+                                print "house_num: " + house_number
+                            
+                            
+                            print "--------------------------------------------------"   
+                            
+                            street_prefix = addressParser.parse_address(output).street_prefix
+                            if street_prefix is not None:
+                                print "street_address: " + street_prefix
+                            
+                            print "--------------------------------------------------"   
+                            
+                            street = addressParser.parse_address(output).street
+                            if street is not None:
+                                print "street: " + street
+                               
+                            print "---------------------------------------"   
+                               
+                            street_suffix = addressParser.parse_address(output).street_suffix
+                            if street_suffix is not None:
+                                print "full_prefix: " + street_suffix
+                                
+                            print "---------------------------------"   
+                                
+                            apartment = addressParser.parse_address(output).apartment
+                            if apartment is not None:
+                                print "apt no: " + apartment
+                                
+                            print "------------------------------------------"   
+                                
+                            buiding = addressParser.parse_address(output).buiding
+                            if buiding is not None:
+                                print "building: " + buiding
+                                
+                            print "---------------------------------------"   
+                                
+                            city = addressParser.parse_address(output).city
+                            if city is not None:
+                                print "city: " + city
+                            
+                            print "-----------------------------------"   
+                            
+                            state = addressParser.parse_address(output).state
+                            if state is not None:
+                                print "state: " + state
+                            
+                            print "---------------------------------------"
+                            
+                            zip = addressParser.parse_address(output).zip
+                            if zip is not None:
+                                print "zip: " + zip
+                            
+                            print " +++++++++++++++++++++++++++++++++++++++++"
+                            '''
+                            ''' # get  previous
+                            if(index-1>=0):
+                                address = str(addressParser.parse_address(locationText[index-1])) + address
+
+                            # get next
+                            if(index+1<end):
+                                address+= str(addressParser.parse_address(locationText[index+1]))
+                            '''
                         except:
                             pass
-                        print "out: " + address
-                        print "text: " + output
-
+                           
+                        if address is not "cannot find":
+                            if address not in list_of_addresses:
+                                list_of_addresses.append(address)
+                        index+=1
+                        
                     pattern = re.compile(r'\t+')
                     output = re.sub(pattern, '', str(locationTag))
-                    #print output
-                    print "___________________________________________________________ "
-                    print "\n"
-
-            print "_____End Location tags____\n"
-
-
-# Loop through each line in the file.
-index = 0
-
+                
+# MAKES REQUESTS ---------------------------------------------------------------------------------
+                #for item in list_of_addresses:
+                 #   print item
+    
+                
+                for address in list_of_addresses:
+                    address.replace(" ", "+")
+                    #print "original address: " + address
+                    request = "http://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&sensor=true"
+                    r = requests.get(request)
+                    if r.json() is not None:
+                        response = r.json()
+                        if(response['status'] == "OK"):
+                            results = response["results"]
+                            for result in results:
+                                print result["formatted_address"]
+                        else:
+                            print response['status']
+                    
+                
 for line in lines:
-    line = lines[index]
-    index += 1
-
     # load the line and the value that we want.
-    body = json.loads(line).values()[0]
+    body = json.loads(line)['body']
 
     # Use the quopri module to decode the qp_encoded value of each page.
     decodedQP = quopri.decodestring(body)
@@ -113,5 +195,4 @@ for line in lines:
     outFile.write(decodedQP)
     outFile.write("\n")
     outFile.close()
-
 
