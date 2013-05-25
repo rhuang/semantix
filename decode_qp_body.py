@@ -77,6 +77,8 @@ def printLocations(soup):
                             #print output
                             address = addressParser.parse_address(output).full_address()
 
+                            # make all spaces into single space
+                            output = re.sub(r'\s+', ' ', output)
                             "regex matches"
                             #print  re.findall(r"\D(\d[0-9]{3,})\D", " "+output+" ")
                             index += 1
@@ -94,7 +96,7 @@ def printLocations(soup):
                                 siblingText = str(allText[siblingIndex])
 
                                 if re.sub(r'\s+', '', siblingText) != re.sub(r'\s+', '', output):
-                                    output += siblingText
+                                    output += re.sub(r'\s+', ' ', siblingText)
                                 # found 3> numbers in a row, hopefully its a postal code
                                 if len(re.findall(r"\D(\d[0-9]{3,})\D", " " + siblingText + " ")) > 0:
                                     break;
