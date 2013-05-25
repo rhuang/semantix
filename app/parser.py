@@ -23,6 +23,7 @@ def parse():
     def parseLocations(soup):
         title = soup.title
         formattedAddresses = []
+
         if title is not None:
             if 'location' in str(title):
                 r = re.compile(r'location', re.IGNORECASE)
@@ -48,45 +49,50 @@ def parse():
                 if locationTags:
                     addressParser = AddressParser()
 
-                    addresses = []
-                    
+                    addresses = []     
                     for locationTag in locationTags:
-                        locationSoup = BeautifulSoup(str(locationTag))
-                        # Extract the text value from all the tags.
-                        allText = locationSoup.find_all(text = True)
-                        index = 0
-                        for text in allText:
-                            pattern = re.compile(r'\t+')
-                            cleanText = re.sub(pattern, '', text)
-                            address = None
-                            try:
-                                address = addressParser.parse_address(cleanText).full_address()
-                                index += 1
-                                siblingIndex = index + 1
-                                maxSiblingSearchDepth = 4
-                                siblingSearchDepth = 0
+                        
+                        #print str(locationTag.name)
+                        if str(locationTag.name) != "script":
+                            locationSoup = BeautifulSoup(str(locationTag))
+                            # Extract the text value from all the tags.
+                            allText = locationSoup.find_all(text = True)
+                            index = 0
+                            for text in allText:
+                                pattern = re.compile(r'\t+')
+                                #cleanText = re.sub(pattern, '', text)
+                                cleanText = re.sub(r'\s+', ' ', text)   
+                                if cleanText.find("{") == -1:
+                                    address = None
+                                    try:
+                                        parsedAdress = addressParser.parse_address(cleanText).full_address()
+                                        index += 1
+                                        siblingIndex = index + 1
+                                        maxSiblingSearchDepth = 4
+                                        siblingSearchDepth = 0
 
-                                while (siblingSearchDepth < maxSiblingSearchDepth):
-                                    siblingText = str(allText[siblingIndex])
+                                        while (siblingSearchDepth < maxSiblingSearchDepth):
+                                            siblingText = str(allText[siblingIndex])
 
-                                    if re.sub(r'\s+', '', siblingText) != re.sub(r'\s+', '', cleanText):
-                                        cleanText += siblingText
-                                    # Found 3 > numbers in a row, hopefully it's a postal code.
-                                    if len(re.findall(r"\D(\d[0-9]{3,})\D", ' ' + siblingText + ' ')) > 0:
-                                        break;
+                                            if re.sub(r'\s+', '', siblingText) != re.sub(r'\s+', '', cleanText):
+                                                cleanText += re.sub(r'\s+', ' ', siblingText)   
+                                            # Found 3 > numbers in a row, hopefully it's a postal code.
+                                            if len(re.findall(r"\D(\d[0-9]{3,})\D", ' ' + siblingText + ' ')) > 0:
+                                                break;
 
-                                    siblingIndex += 1
-                                    siblingSearchDepth += 1
+                                            siblingIndex += 1
+                                            siblingSearchDepth += 1
 
-                                if cleanText not in addresses:
-                                    if len(addresses) == 0:
-                                        addresses.append(cleanText)
-                            except:
-                                pass
-                               
+                                        if cleanText not in addresses:
+                                            #if len(addresses) == 0:
+                                            addresses.append(cleanText)
+                                    except:
+                                        pass
+                           
+                    
                     for address in addresses:
                         address.replace(' ', '+')
-                        print 'Original: ' + address
+                        #print '\nORIGINAL' + re.sub(r'\s+', ' ', address)
                         request = 'https://maps.googleapis.com/maps/api/place/textsearch/json?sensor=true&key=AIzaSyDZa2Ayyv1Nk0um0VJvSkM8qj_uzESBMIQ&query=' + address
                         # request = 'http://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&sensor=true'
                         
@@ -95,13 +101,18 @@ def parse():
                             response = r.json()
                             if response['status'] == 'OK':
                                 results = response['results']
-                                print '----------RESULTS----------'
+                                #print '----------RESULTS----------'
+
                                 for result in results:
-                                    print 'Address: ' + result['formatted_address']
-                                    formattedAddresses.append(result['formatted_address'])
-                            else:
-                                print response['status']
-        
+                                    #print 'Address: ' + result['formatted_address']
+                                    if len(results) == 1:
+                                        formattedAddresses.append(result['formatted_address'])
+                            #else:
+                                #print response['status']
+                    
+        for address in formattedAddresses:
+            print address
+            
         return formattedAddresses
                         
                     
