@@ -31,7 +31,7 @@ def locationCheck(tag):
 def parseSingleSoup(soup):
     title = soup.title
 
-    if title is not None and 'location' in str(title):
+    if title is not None and 'location' in str(title).lower():
         r = re.compile(r'location', re.IGNORECASE)          
         locationTags = soup.find_all(locationCheck)
 
