@@ -16,13 +16,15 @@ def parse():
     # Read the file contents.
     lines = inputFile.readlines()
     
-    soups = []
+    soups = [] 
+    
     for line in lines:
         # Load the line and the value 'body'.
         body = json.loads(line)['body']
     
         # Use the quopri module to decode the qp encoded value of each page.
         decodedQP = quopri.decodestring(body)
+
         soups.append(BeautifulSoup(decodedQP))
-        
+    
     return soups

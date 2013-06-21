@@ -2,7 +2,7 @@ import threading
 import sys
 import os
 import jsonParser
-import locationsParser
+import locationParserTrial as locationsParser
 
 WINDOWS = 'nt'
 
@@ -15,6 +15,7 @@ soups = jsonParser.parse()
 ##### LOCATIONS ###################################################################
 def locationCBFunc(formattedAddresses):
     print 'Formatted Addresses in thread: %s' % threading.current_thread().name
+    
     for address in formattedAddresses:
         if os.name == WINDOWS:
             print(address.encode('cp1252'))
