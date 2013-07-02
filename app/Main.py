@@ -2,6 +2,8 @@ import threading
 import sys
 import os
 import jsonParser
+import locationsParser
+import menuParser
 import locationParserTrial as locationsParser
 
 WINDOWS = 'nt'
@@ -31,11 +33,15 @@ def locationsThread(callback):
     
 
 ##### Menu ########################################################################    
-#def menuCBFunc(formattedAddresses):  
-#def menuThread(callback):
+def menuCBFunc(formattedAddresses):  
+	print "At the end"
+def menuThread(callback):
+	callback(menuParser.parseMenu(soups))
     
 
 ##### Threads #####################################################################
-thr = threading.Thread(target=locationsThread, name="Location Thread", args=(locationCBFunc,)).start()
+# thr = threading.Thread(target=locationsThread, name="Location Thread", args=(locationCBFunc,)).start()
 #thr = threading.Thread(target=hoursThread, name="Hours Thread", args=(hoursCBFunc,)).start()
+thr = threading.Thread(target=menuThread, name="Menu Thread", args=(menuCBFunc,)).start()
+=======
 #thr = threading.Thread(target=menuThread, name="Menu Thread", args=(menuCBFunc,)).start()
