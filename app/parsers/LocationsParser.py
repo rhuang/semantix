@@ -9,7 +9,6 @@ def parseSingleSoup(soup):
     finalAddresses = []
     if soup is not None:
         pageTitle = soup.title
-        finalText = ""
         if pageTitle is not None and 'location' in str(pageTitle).lower():
             ''' 
             TODO: What if the location is not in the page title?
@@ -21,9 +20,9 @@ def parseSingleSoup(soup):
                 divTagTextCollection = divTag.findAll(text=True, recursive=False)
                 finalText = ""
                 for text in divTagTextCollection:        
-                    if len(re.sub(r'\s+', '', text)) > 0:
+                    if len(re.sub(r'\s+', '', text)) > 0: #removes whitespace, doesnt change text
                         if re.search(removeScriptTagsPattern, text) is None and not any(word in incorrectWords for word in text.lower().split()):
-                            finalText += str(re.sub(r'\s+', ' ', text))
+                            finalText += str(re.sub(r'\s+', ' ', text)) #change any white space into single space
             
                 if finalText:
                     finalAddresses.append(finalText)             

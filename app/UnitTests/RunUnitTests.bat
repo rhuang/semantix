@@ -1,3 +1,3 @@
 @echo off
 echo Running Unit Tests.....
-python -m unittest discover
+python -m unittest discover -v

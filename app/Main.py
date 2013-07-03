@@ -34,6 +34,12 @@ def locations():
 def menuCallback(menuItems):
     print 'Menu items in thread: %s' % threading.current_thread().name
 
+    for address in formattedAddresses:
+        if os.name == WINDOWS:
+            print(address.encode('cp1252'))            
+        else:
+            print address
+
 def menuThread(callback):
 	callback(MenuParser.parse(soups))
 
