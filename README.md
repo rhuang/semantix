@@ -23,3 +23,21 @@ We activate a virtual environment to ensure our project runs on the enclosed Pyt
 not affected by the other Python versions installed on the machine. Flask is also installed into 
 the virtual environment, and not globally on our machine.
 
+Classifier
+----------
+
+The classifier uses the NTLK library. 
+Installation
+	1. sudo easy_install -U pyyaml nltk OR
+	2. sudo pip install -U pyyaml nltk
+
+OCR Recognition
+---------------
+
+OCR recognition is done using the Tesseract library.
+
+Installation:
+	1. brew install tesseract
+
+Usage:
+	tesseract [image_name] [output_file]
