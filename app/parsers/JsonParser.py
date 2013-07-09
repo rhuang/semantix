@@ -1,13 +1,12 @@
 from bs4 import BeautifulSoup
-import re
 import quopri
 import json
 import os, errno
-import sys
-import requests
+import settings
 
-def parse():
-    INPUT_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cpk.txt')
+def parseData():
+
+    INPUT_FILE = settings.CPK_DATA
 
     # Open the file.
     inputFile = open(INPUT_FILE, 'r')
