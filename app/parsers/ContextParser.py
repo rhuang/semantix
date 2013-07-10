@@ -52,8 +52,19 @@ def parseSoups(soups):
     for soup in soups:
         parseSingleSoup(soup, contextMap)
         
-    for item in contextMap.items():
-        print item
-        print "\n"
+    for key, value in contextMap.items() :
+        if float(key[1]) > 0.9 and key[0] is not "noise":
+            
+            print (key, value)
+            print "\n"
+
+    print "\n"
+    print "****************************************************************************************"
+    print "\n"
+
+    for key, value in contextMap.items() :
+        if float(key[1]) < 0.9 and key[0] is "noise":
+            print (key, value)
+            print "\n"
         
     return contextMap
