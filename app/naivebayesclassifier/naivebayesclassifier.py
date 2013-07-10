@@ -77,7 +77,7 @@ testingSet = {
 }
 
 def labels():
-    return ['menu', 'location']
+    return ['menu', 'location', 'noise']
 
 def trainingSet():
     def createTrainingDict(fileName, category):
@@ -95,9 +95,11 @@ def trainingSet():
     trainingSet = {}
     locationFiles = ['countries', 'states', 'addresses']
     menuFiles = ['menus']
+    noiseFiles = ['noise']
 
     training(locationFiles, 'location')
     training(menuFiles, 'menu')
+    training(noiseFiles, "noise")
 
     return trainingSet
 
