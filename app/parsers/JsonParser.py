@@ -5,7 +5,9 @@ import os, errno
 import settings
 
 def parseData():
-    INPUT_FILE = os.path.join(settings.APP_DATA_HTML, 'cpk.txt')
+
+    INPUT_FILE = settings.CPK_DATA
+
     soups = [] 
 
     with open(INPUT_FILE) as inputFile:

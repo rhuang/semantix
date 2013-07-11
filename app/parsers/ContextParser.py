@@ -26,7 +26,6 @@ def parseSingleSoup(soup, contextMap, nbc):
                             finalText += str(re.sub(r'\s+', ' ', text))            
 
                 if finalText:
-                    #category = "test " 
                     category = nbc.classify(finalText)
                     # add into hash map
                     if contextMap.get(category) is not None:
@@ -47,6 +46,8 @@ def parseSoups(soups):
     #print "+ chicken & shrimp" + str(nbc.classify("+ Chicken & Shrimp"))
 
     nbc = NaiveBayesClassifier()
+
+    nbc.demo()
 
     contextMap = {}
     for soup in soups:
