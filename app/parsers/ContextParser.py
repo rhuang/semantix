@@ -13,28 +13,26 @@ def parseSingleSoup(soup, contextMap, nbc):
     textList = []
     scriptTags = re.compile(r"[{}\[\]\*>=]")
     if soup is not None:
-        pageTitle = soup.title
-        if pageTitle is not None:
-            tags = soup.findAll()
-            for tag in tags:
+        tags = soup.findAll()
+        for tag in tags:
 
-                tagText = tag.findAll(text=True, recursive=False)                                                # get one level of text depth
-                finalText = ""
-                for text in tagText:        
+            tagText = tag.findAll(text=True, recursive=False)                                                # get one level of text depth
+            finalText = ""
+            for text in tagText:        
 
-                    if len(re.sub(r'\s+', '', text)) > 0 and re.search(scriptTags, text) is None:                # if this actually contains text AND do not take characters with script chars in it
-                            finalText += str(re.sub(r'\s+', ' ', text))            
+                if len(re.sub(r'\s+', '', text)) > 0 and re.search(scriptTags, text) is None:                # if this actually contains text AND do not take characters with script chars in it
+                        finalText += str(re.sub(r'\s+', ' ', text))            
 
-                if finalText:
-                    category = nbc.classify(finalText)
-                    # add into hash map
-                    if contextMap.get(category) is not None:
-                        contextMap.get(category).append(finalText)
-                    else:
-                        listOfWords = []
-                        listOfWords.append(finalText)
-                        contextMap[category] = listOfWords
-
+            if finalText:
+                #category = "test " 
+                category = nbc.classify(finalText)
+                # add into hash map
+                if contextMap.get(category) is not None:
+                    contextMap.get(category).append(finalText)
+                else:
+                    listOfWords = []
+                    listOfWords.append(finalText)
+                    contextMap[category] = listOfWords
 
 
 # Input         - soups     : A list of soups that Beautiful soup is capable of parsing
