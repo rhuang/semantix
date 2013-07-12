@@ -40,11 +40,8 @@ def parseSingleSoup(soup, contextMap, nbc):
 # Output        - A map that contains all classification types as keys, with their respective values as a list of text 
 
 def parseSoups(soups):
-    #print nbc.classify("bacon cheeseburger with spring rolls")
-    #print "+ chicken & shrimp" + str(nbc.classify("+ Chicken & Shrimp"))
 
     nbc = NaiveBayesClassifier()
-
     nbc.demo()
 
     contextMap = {}
