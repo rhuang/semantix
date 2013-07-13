@@ -1,3 +1,2 @@
-. venv/bin/activate
+. venv/bin/activate 
 ./run.py
-

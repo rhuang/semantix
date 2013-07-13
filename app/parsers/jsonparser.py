@@ -2,11 +2,10 @@ from bs4 import BeautifulSoup
 import quopri
 import json
 import os, errno
-import settings
 
-def parseData():
 
-    INPUT_FILE = settings.CPK_DATA
+
+def parseData(INPUT_FILE):
 
     soups = [] 
 
@@ -19,4 +18,5 @@ def parseData():
             soups.append(BeautifulSoup(decodedQP))
     
     return soups
+    
 

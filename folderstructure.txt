@@ -1,15 +1,19 @@
-/run.py
-/app
-    /templates
-    /static
-    /unittests
-    /nbc
-        /__init__.py
-    /parsers
-        /__init__.py
-        /contextparser.py
-    /__init__.py
-    /settings.py
-    /views.py
-    /main.py
+/semantix
+    __init__.py
+    /run.py
+    /app
+        __init__.py
+        /templates
+        /static
+        /unittests
+        /nbc
+            /__init__.py
+        /parsers
+            /__init__.py
+            /contextparser.py
+        
+        /settings.py
+        /views.py
+        /main.py
+    /venv
 

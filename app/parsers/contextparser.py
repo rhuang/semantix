@@ -1,8 +1,4 @@
 import re
-from naivebayesclassifier import NaiveBayesClassifier
-
-#incorrectWords = set(["google","analytics","tag","ads"])
-#if not any(word in incorrectWords for word in text.lower().split()):
 
 # Input         -   soup        : A soup that 
 #                   contextMap  : A map that contains all classification types as keys, with their respective values as a list of text 
@@ -39,14 +35,14 @@ def parseSingleSoup(soup, contextMap, nbc):
 # Description   - 
 # Output        - A map that contains all classification types as keys, with their respective values as a list of text 
 
-def parseSoups(soups):
+def parseSoups(soups,nbc):
 
-    nbc = NaiveBayesClassifier()
+    
     nbc.demo()
 
     contextMap = {}
     for soup in soups:
-        parseSingleSoup(soup, contextMap, nbc)
+        parseSingleSoup(soup, contextMap,nbc)
         
     for key, value in contextMap.items() :
         if float(key[1]) > 0.9 and key[0] is not "noise":
