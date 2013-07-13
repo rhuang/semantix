@@ -1,7 +1,18 @@
 import unittest
 import sys, os
+
+#os.path.dirname(__file__) returns back the path to the directory containing
+# __file__, which refers to the file which was called in the console
+# in this case it is test_locationUnitTest. __file__ does not need to be
+# a single file name it can be a relative or absolute path, as well, to some
+# directory for example
+
+#os.path.abspath(__file__) returns back the path including the file which was
+# called in the console
+
 sys.path.insert(0, os.path.dirname(__file__)+"\\..")
-import stringSimilarity
+import stringsimilarity
+
 
 def filterDuplicateAddresses(addresses):
     filteredAddresses = []
@@ -10,7 +21,7 @@ def filterDuplicateAddresses(addresses):
             break
         addresses.remove(address1)
         for address2 in addresses[:]:
-            similarity = stringSimilarity.compute(address1, address2)
+            similarity = stringsimilarity.compute(address1, address2)
             if similarity > 0.6:
                 addresses.remove(address2)
                 if len(address2) > len(address1):

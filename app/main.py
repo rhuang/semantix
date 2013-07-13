@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+sys.path.insert(0,os.path.dirname(os.path.dirname(__file__)))
 import settings
 from parsers import jsonparser as JsonParser
 from parsers import contextparser as ContextParser

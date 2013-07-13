@@ -2,6 +2,7 @@ import os
 import sys
 from nltk.probability import ELEProbDist, FreqDist
 import nltk
+from nltk.probability import ELEProbDist, FreqDist
 from collections import defaultdict
 from os import listdir
 from os.path import isfile, join
