@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row">
+        <div class="span12 data-wrap">
+            
+            <div class="row">
+                <div class="span2">
+                    <h2>Trainer</h2>
+                </div>
+
+                <div class="span6">
+                    <div id="new_category_button" class="span2 btn btn-small btn-block btn-success">
+                        Add New Category
+                        <span class="fui-plus"></span>
+                    </div>
+                    <div id="save_button" class="span2 btn btn-small btn-block btn-info">
+                        Save
+                        <span class="fui-check"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <hr/>
+            
+            <div class="row">
+                <div class="span6 data-item noRightMargin">
+                    <h4>Category A</h4>
+                </div>
+                <div class="span6 data-item noRightMargin">
+                    <h4>Category B</h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span3 data-item noRightMargin">
+                    <select id="categoryA_select"></select>
+                </div>
+
+                <div class="span3 category_label">
+                    <div class="control-group">
+                        <input type="text" placeholder="Add New Label" class="span3">
+                        <i id="add_categoryA_label" class="input-icon fui-plus-inverted"></i>
+                    </div>
+                </div>
+
+                <div class="span3 data-item noRightMargin">
+                    <select id="categoryB_select"></select>
+                </div>
+
+                <div class="span3 category_label">
+                    <div class="control-group">
+                        <input type="text" placeholder="Add New Label" class="span3">
+                        <i id="add_categoryB_label" class="input-icon fui-plus-inverted"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="draggable_container" class="row">
+                <div class="span6 data-item noRightMargin">
+                    <div id="catATags_tagsinput" class="tagsinput droppable connectedSortable"></div>
+                </div>
+                <div class="span6 data-item noRightMargin">
+                    <div id="catBTags_tagsinput" class="tagsinput droppable connectedSortable"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,6 +1,8 @@
 from flask import render_template
 from app import app
 import main
+import businesscategories
+import json
 
 @app.route('/')
 def index():
@@ -12,11 +14,12 @@ def index():
     }
     return render_template('index.html', data = data)
 
-@app.route('/locations')
-def locations():
-    return main.locations()
+@app.route('/trainer')
+def trainer():
+	return render_template('trainer.html')
 
-@app.route('/menu')
-def menu():
-    return main.menu()
+@app.route('/business_categories')
+def BusinessCategories():
+	return json.dumps(businesscategories.getCategories())
+    
 

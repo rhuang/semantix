@@ -39,8 +39,8 @@ html, body {
     margin-right: 0;
 }
 
-#locationTags_tagsinput, #menuTags_tagsinput {
-    height: 400px;
+#catATags_tagsinput, #catBTags_tagsinput {
+    height: auto;
     overflow: auto;
     overflow-x: hidden;
 }
@@ -54,4 +54,22 @@ html, body {
 	margin-top: -210px;
 	height: 210px;
 	clear: both;
+}
+
+li a span.pull-left {
+    margin-left: 20px;
+}
+
+dt {
+    color: #ffffff;
+    font-style: italic;
+}
+
+#new_category_button, #save_button {
+    margin-top: 30px;
+}
+
+.category_label {
+    margin-left: 0;
+    margin-right: 30px;
 }

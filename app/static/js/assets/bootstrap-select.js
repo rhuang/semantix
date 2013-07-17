@@ -151,8 +151,8 @@
             this.$element.find('option').each(function(index) {
                 //Get the class and text for the option
                 var optionClass = $(this).attr("class") !== undefined ? $(this).attr("class") : '';
-               	var text =  $(this).text();
-               	var subtext = $(this).data('subtext') !== undefined ? '<small class="muted">'+$(this).data('subtext')+'</small>' : '';
+                var text =  $(this).text();
+                var subtext = $(this).data('subtext') !== undefined ? '<small class="muted">'+$(this).data('subtext')+'</small>' : '';
 
                 //Append any subtext to the main text.
                 text+=subtext;
@@ -251,8 +251,8 @@
             }
             
             this.$element.next('.select').find('.filter-option').html( title );
-	    },
-	    
+        },
+        
         
         
         setSelected:function(index, selected) {
@@ -279,15 +279,15 @@
                 });
             }
         },
-		
-		checkTabIndex: function() {
-			if (this.$element.is('[tabindex]')) {
-				var tabindex = this.$element.attr("tabindex");
-				this.button.attr('tabindex', tabindex);
-			}
-		},
-		
-		clickListener: function() {
+        
+        checkTabIndex: function() {
+            if (this.$element.is('[tabindex]')) {
+                var tabindex = this.$element.attr("tabindex");
+                this.button.attr('tabindex', tabindex);
+            }
+        },
+        
+        clickListener: function() {
             var _this = this;
             
             $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
@@ -371,11 +371,11 @@
                 options = typeof option == 'object' && option;
             
             if (!data) {
-            	$this.data('selectpicker', (data = new Selectpicker(this, options, event)));
+                $this.data('selectpicker', (data = new Selectpicker(this, options, event)));
             } else {
-            	for(var i in option) {
-            		data[i]=option[i];
-            	}
+                for(var i in option) {
+                    data[i]=option[i];
+                }
             }
             
             if (typeof option == 'string') {
