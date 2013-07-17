@@ -135,30 +135,38 @@ function setDraggable() {
 //with the words for that category which will be draggable items
 $("#categoryA_select").change(function() {
     key = $(this).val();
-    searchForKey(key, data);
-    var catA_HTML = '';
-    for (var i in wordsList) {
-        var word = wordsList[i].trim()
-        catA_HTML += '<span class="tag draggable"><span>' + word + 
-        '<a class="tagsinput-remove-link"></a></span></span>';
+    if(key != "Select Category") {
+        searchForKey(key, data);
+        var catA_HTML = '';
+        for (var i in wordsList) {
+            var word = wordsList[i].trim()
+            catA_HTML += '<span class="tag draggable"><span>' + word + 
+            '<a class="tagsinput-remove-link"></a></span></span>';
+        }
+        $('#catATags_tagsinput').html(catA_HTML);
+        setDraggable();
+        setTagRemoval();
+    } else {
+        $('#catATags_tagsinput').html('');
     }
-    $('#catATags_tagsinput').html(catA_HTML);
-    setDraggable();
-    setTagRemoval();
 });
 
 $("#categoryB_select").change(function() {
     key = $(this).val();
-    searchForKey(key, data);
-    var catB_HTML = '';
-    for (var i in wordsList) {
-        var word = wordsList[i].trim()
-        catB_HTML += '<span class="tag draggable"><span>' + word + 
-        '<a class="tagsinput-remove-link"></a></span></span>';
+    if(key != "Select Category") {
+        searchForKey(key, data);
+        var catB_HTML = '';
+        for (var i in wordsList) {
+            var word = wordsList[i].trim()
+            catB_HTML += '<span class="tag draggable"><span>' + word + 
+            '<a class="tagsinput-remove-link"></a></span></span>';
+        }
+        $('#catBTags_tagsinput').html(catB_HTML);
+        setDraggable();
+        setTagRemoval();
+    } else {
+        $('#catBTags_tagsinput').html('');
     }
-    $('#catBTags_tagsinput').html(catB_HTML);
-    setDraggable();
-    setTagRemoval();
 });
 
 //When you click on the X on a draggable item this funtion helps to
@@ -175,22 +183,26 @@ function setTagRemoval() {
 $('#add_categoryA_label').click(function(event) {
     var $input = $(event.target).siblings('input');
     var label = $input.val();
-    $input.val('');
-    var html = '<span class="tag draggable"><span>' + label + 
-        '<a class="tagsinput-remove-link"></a></span></span>';
-    $("#catATags_tagsinput").append(html);
-    setDraggable();
-    setTagRemoval();
+    if (label.length != 0) {
+        $input.val('');
+        var html = '<span class="tag draggable"><span>' + label + 
+            '<a class="tagsinput-remove-link"></a></span></span>';
+        $("#catATags_tagsinput").append(html);
+        setDraggable();
+        setTagRemoval();
+    }
 });
 
 $('#add_categoryB_label').click(function(event) {
     var $input = $(event.target).siblings('input');
     var label = $input.val();
-    $input.val('');
-    var html = '<span class="tag draggable"><span>' + label + 
-        '<a class="tagsinput-remove-link"></a></span></span>';
-    $("#catBTags_tagsinput").append(html);
-    setDraggable();
-    setTagRemoval();
+    if (label.length != 0) {
+        $input.val('');
+        var html = '<span class="tag draggable"><span>' + label + 
+            '<a class="tagsinput-remove-link"></a></span></span>';
+        $("#catBTags_tagsinput").append(html);
+        setDraggable();
+        setTagRemoval();
+    }
 });
 
