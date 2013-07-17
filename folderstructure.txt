@@ -1,5 +1,7 @@
 /semantix
     __init__.py
+    /settings.py
+    /venv
     /run.py
     /app
         __init__.py
@@ -11,9 +13,5 @@
         /parsers
             /__init__.py
             /contextparser.py
-        
-        /settings.py
         /views.py
         /main.py
-    /venv
-

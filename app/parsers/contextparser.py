@@ -32,12 +32,12 @@ def parseSingleSoup(soup, contextMap, nbc):
 
 
 # Input         - soups     : A list of soups that Beautiful soup is capable of parsing
+#               - nbc       : A trained naive bayes classifier
 # Description   - 
 # Output        - A map that contains all classification types as keys, with their respective values as a list of text 
 
 def parseSoups(soups,nbc):
 
-    
     nbc.demo()
 
     contextMap = {}

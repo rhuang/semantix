@@ -29,7 +29,7 @@ class NaiveBayesClassifier:
         if trainingDirectory is None:
             raise Exception('Please input an absolute path training directory.')
         # Start training.
-        self.__trainingDirectory = trainingDirectory.lower()
+        self.__trainingDirectory = trainingDirectory
         self.train(self.__trainingDirectory)
 
     """ Creates and returns a training set (dictionary) from one data file belonging to a label. """
