@@ -84,20 +84,26 @@ $(function() {
     $("#catATags_tagsinput").droppable({
       accept: "#catBTags_tagsinput > span",
       drop: function( event, ui ) {
-        deleteSpan( ui.draggable, "#catBTags_tagsinput", "#catATags_tagsinput");
+        var select_option = $("#categoryA_select").val();
+        if(select_option != "Select Category") {
+            deleteSpan( ui.draggable, "#catBTags_tagsinput", "#catATags_tagsinput");
+        }
       }
     });
 
     $("#catBTags_tagsinput").droppable({
       accept: "#catATags_tagsinput > span",
       drop: function( event, ui ) {
-        deleteSpan(ui.draggable, "#catATags_tagsinput", "#catBTags_tagsinput");
+        var select_option = $("#categoryB_select").val();
+        if(select_option != "Select Category") {
+            deleteSpan(ui.draggable, "#catATags_tagsinput", "#catBTags_tagsinput");
+        }
       }
     });
 });
 
 //helper for when an element is dropped in the opposite box, need to remove it
-//from its original box
+//from its original box and add it to its new box
 function deleteSpan($item, removeFrom, moveTo) {
     var $list = $(moveTo);
     $item.find(removeFrom).remove();
@@ -121,12 +127,10 @@ function searchForKey(key, obj) {
 // and makes them draggable using the JQuery API
 function setDraggable() {
     $('.draggable').draggable({
-        addClasses: false,
         revert: "invalid",
         stack: ".draggable",
         helper: "clone",
-        cursor: "move",
-        appendTo: "parent"
+        appendTo: "#draggable_container"
     });
 }
 
