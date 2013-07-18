@@ -58,17 +58,10 @@ function recursiveFunction(key, val) {
     if (val instanceof Array) {
         makeOption(key);
     } else if (val instanceof Object) {
-        makeOptGroup(key);
         $.each(val, function(key, value) {
             recursiveFunction(key, value);
         });
     }
-}
-
-//helper for recursiveFunction
-//simply makes html that will be put into the select element
-function makeOptGroup(key) {
-    selectOptionsHTML += '<optgroup label="' + key + '">';
 }
 
 //helper for recursiveFunction
@@ -108,6 +101,45 @@ function deleteSpan($item, removeFrom, moveTo) {
     var $list = $(moveTo);
     $item.find(removeFrom).remove();
     $item.appendTo($list);
+    updateData($item.text(), moveTo);
+}
+
+//this function updates the data dictionary, which stores information
+//about what terms belong to what categories
+function updateData(item, moveTo) {
+    var fromCat, toCat;
+    if(moveTo == "#catATags_tagsinput") {
+        toCat = $("#categoryA_select").val();
+        fromCat = $("#categoryB_select").val();
+    } else {
+        toCat = $("#categoryB_select").val();
+        fromCat = $("#categoryA_select").val();
+    }
+
+    searchForItemAndRemove(item, data, fromCat);
+    searchForLocationAndAdd(item, data, toCat);
+}
+
+function searchForItemAndRemove(item, obj, from) {
+    $.each(obj, function(key, val) {
+        if(from == key && $.isArray(val)) {
+            val.splice(val.indexOf(item), 1);
+            return;
+        } else if(!$.isArray(val)) {
+            searchForItemAndRemove(item, val, from);
+        }
+    });
+}
+
+function searchForLocationAndAdd(item, obj, to) {
+    $.each(obj, function(key, val) {
+        if(to == key && $.isArray(val)) {
+            val.push(item);
+            return;
+        } else if(!$.isArray(val)) {
+            searchForLocationAndAdd(item, val, to);
+        }
+    });
 }
 
 //This function helps to find the words that will be made into
@@ -150,7 +182,7 @@ $("#categoryA_select").change(function() {
         }
         $('#catATags_tagsinput').html(catA_HTML);
         setDraggable();
-        setTagRemoval();
+        setTagRemoval($("#categoryA_select").val());
     } else {
         $('#catATags_tagsinput').html('');
     }
@@ -168,7 +200,7 @@ $("#categoryB_select").change(function() {
         }
         $('#catBTags_tagsinput').html(catB_HTML);
         setDraggable();
-        setTagRemoval();
+        setTagRemoval($("#categoryB_select").val());
     } else {
         $('#catBTags_tagsinput').html('');
     }
@@ -176,9 +208,12 @@ $("#categoryB_select").change(function() {
 
 //When you click on the X on a draggable item this funtion helps to
 //remove that draggable item
-function setTagRemoval() {
+function setTagRemoval(from) {
     $('.tagsinput-remove-link').click(function(event) {
-        $(event.target).closest('span[class^="tag"]').remove();
+        var $span = $(event.target).closest('span[class^="tag"]');
+        var label = $span.text();
+        searchForItemAndRemove(label, data, from);
+        $span.remove();
     });
 }
 
@@ -194,7 +229,8 @@ $('#add_categoryA_label').click(function(event) {
             '<a class="tagsinput-remove-link"></a></span></span>';
         $("#catATags_tagsinput").append(html);
         setDraggable();
-        setTagRemoval();
+        setTagRemoval($("#categoryA_select").val());
+        searchForLocationAndAdd(label, data, select_option);
     }
     $input.val('');
 });
@@ -208,8 +244,19 @@ $('#add_categoryB_label').click(function(event) {
             '<a class="tagsinput-remove-link"></a></span></span>';
         $("#catBTags_tagsinput").append(html);
         setDraggable();
-        setTagRemoval();
+        setTagRemoval($("#categoryB_select").val());
+        searchForLocationAndAdd(label, data, select_option);
     }
     $input.val('');
 });
 
+$("#save_button").click(function(event) {
+    $.post({
+        url: '/save_classified_data',
+        data: { classified_data : data }
+    }).done(function(data) {
+        console.log(data);
+    }).fail(function() {
+        console.log("post failed");
+    });
+});
