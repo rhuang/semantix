@@ -115,7 +115,7 @@ function deleteSpan($item, removeFrom, moveTo) {
 var wordsList
 function searchForKey(key, obj) {
     $.each(obj, function(term, val){
-        if(key == term) {
+        if(key == term && $.isArray(val)) {
             wordsList = val;
         } else if(!$.isArray(val)) {
             searchForKey(key, val);
@@ -143,7 +143,7 @@ $("#categoryA_select").change(function() {
         searchForKey(key, data);
         var catA_HTML = '';
         for (var i in wordsList) {
-            var word = wordsList[i].trim()
+            var word = wordsList[i]
             catA_HTML += '<span class="tag draggable"><span>' + word + 
             '<a class="tagsinput-remove-link"></a></span></span>';
         }
@@ -161,7 +161,7 @@ $("#categoryB_select").change(function() {
         searchForKey(key, data);
         var catB_HTML = '';
         for (var i in wordsList) {
-            var word = wordsList[i].trim()
+            var word = wordsList[i]
             catB_HTML += '<span class="tag draggable"><span>' + word + 
             '<a class="tagsinput-remove-link"></a></span></span>';
         }

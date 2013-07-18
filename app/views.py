@@ -1,6 +1,7 @@
 from flask import render_template
 from app import app
 import main
+import settings
 import businesscategories
 import json
 
@@ -20,6 +21,8 @@ def trainer():
 
 @app.route('/business_categories')
 def BusinessCategories():
-	return json.dumps(businesscategories.getCategories())
+	path = settings.APP_DATA_TRAINING
+	data = businesscategories.getCategories(path)
+	return json.dumps(data)
     
 

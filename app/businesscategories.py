@@ -1,39 +1,29 @@
 import os
 import settings
 
-filelist = os.listdir(settings.APP_DATA_TRAINING)
+def getTextFromFile(path):
+    terms = []
+    with open(path) as inputFile:
+        for line in inputFile:
+            terms.append(line.strip())
+    return terms
 
-def getBusinessCatagories(dirName):
+def getCategories(path):
     data = {}
-    directoryPath = os.path.join(settings.APP_DATA_TRAINING, dirName)
-    businessCatagories = os.listdir(directoryPath)
-    for bizCat in businessCatagories:
-        terms = []
-        catagoryPath = os.path.join(directoryPath, bizCat)
-        with open(catagoryPath) as inputFile:
-            for line in inputFile:
-                terms.append(line)
-
-
-
-def getCategories():
-    data = {'Upper Cata':{'bizA':['word1','word2','word1','word2','word1','word2','word1','word2adsafsd','word1','word2','word1safdasfas','word2asdfasdf','word1','word2','word1','word2','word1','word2' ]},
-            'Lower Cata':{'bizB':['word3','word4']}
-            }
+    files = os.listdir(path)
+    for f in files:
+        new_path = os.path.join(path, f)
+        if os.path.isdir(new_path):
+            data[f] = getCategories(new_path)
+        elif os.path.isfile(new_path):
+            data[f] = getTextFromFile(new_path)
     return data
-
-    '''        
-    for f in filelist:
-        if f == 'businesses':
-            businessData = getBusinessCatagories(f)
-            break
-    '''    
 
 
 ''' 
 def renameFilesInDir():
     
-    for f in filelist:
+    for f in training_dir:
         name = getBusinessName(f).strip()
         name = name.encode('ascii', 'ignore')
         name = name.lower()
@@ -59,3 +49,10 @@ def fileNameFromURL(url):
     return url
 
     '''
+
+'''
+data = {'Upper Cata':{'bizA':['word1','word2','word1','word2','word1','word2','word1','word2adsafsd','word1','word2','word1safdasfas','word2asdfasdf','word1','word2','word1','word2','word1','word2' ]},
+            'Lower Cata':{'bizB':['word3','word4']}
+            }
+    return data
+'''
