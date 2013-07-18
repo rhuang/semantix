@@ -24,5 +24,3 @@ def BusinessCategories():
 	path = settings.APP_DATA_TRAINING
 	data = businesscategories.getCategories(path)
 	return json.dumps(data)
-    
-

@@ -6,7 +6,7 @@
 .DS_Store
 venv
 *.pyc
-
+jegi_com.*
 app/*.pyc
 
 *.py[cod]

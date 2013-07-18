@@ -14,8 +14,8 @@ html, body {
 }
 
 .container-wrap .container {
-	overflow: auto;
-	padding-bottom: 210px;
+	overflow: visible;
+	padding-bottom: 0px;
 }
 
 .search-wrap {
@@ -51,8 +51,8 @@ html, body {
 
 .footer {
 	position: relative;
-	margin-top: -210px;
-	height: 210px;
+	margin-bottom: 0px;
+	height: 70px;
 	clear: both;
 }
 

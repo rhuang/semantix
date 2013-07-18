@@ -127,6 +127,7 @@ function searchForKey(key, obj) {
 // and makes them draggable using the JQuery API
 function setDraggable() {
     $('.draggable').draggable({
+        addClasses: false,
         revert: "invalid",
         stack: ".draggable",
         helper: "clone",
@@ -187,26 +188,28 @@ function setTagRemoval() {
 $('#add_categoryA_label').click(function(event) {
     var $input = $(event.target).siblings('input');
     var label = $input.val();
-    if (label.length != 0) {
-        $input.val('');
+    var select_option = $("#categoryA_select").val();
+    if (label.length != 0 && select_option != "Select Category") {
         var html = '<span class="tag draggable"><span>' + label + 
             '<a class="tagsinput-remove-link"></a></span></span>';
         $("#catATags_tagsinput").append(html);
         setDraggable();
         setTagRemoval();
     }
+    $input.val('');
 });
 
 $('#add_categoryB_label').click(function(event) {
     var $input = $(event.target).siblings('input');
     var label = $input.val();
-    if (label.length != 0) {
-        $input.val('');
+    var select_option = $("#categoryB_select").val();
+    if (label.length != 0 && select_option != "Select Category") {
         var html = '<span class="tag draggable"><span>' + label + 
             '<a class="tagsinput-remove-link"></a></span></span>';
         $("#catBTags_tagsinput").append(html);
         setDraggable();
         setTagRemoval();
     }
+    $input.val('');
 });
 
