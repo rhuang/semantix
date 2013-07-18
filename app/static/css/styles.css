@@ -73,3 +73,15 @@ dt {
     margin-left: 0;
     margin-right: 30px;
 }
+
+#categoryA_select, #categoryB_select {
+    width: 250px;
+}
+
+.input_container_A, .input_container_B {
+    width: 300px;
+}
+
+input.span3.inputA, input.span3.inputB {
+    width: 286px;
+}

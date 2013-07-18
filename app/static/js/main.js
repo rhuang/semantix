@@ -159,13 +159,18 @@ function searchForKey(key, obj) {
 // and makes them draggable using the JQuery API
 function setDraggable() {
     $('.draggable').draggable({
-        addClasses: false,
         revert: "invalid",
-        stack: ".draggable",
+        containment: "document",
         helper: "clone",
-        appendTo: "#draggable_container"
     });
 }
+
+/*
+helper: function (e,ui) {
+    return $(this).clone().appendTo($(this));
+},
+containment: "#draggable_container"
+*/
 
 //This following 2 onChange functions do the following
 //when the select option changes we need to fill in the box below
