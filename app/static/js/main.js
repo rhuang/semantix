@@ -251,12 +251,12 @@ $('#add_categoryB_label').click(function(event) {
 });
 
 $("#save_button").click(function(event) {
-    $.post({
-        url: '/save_classified_data',
-        data: { classified_data : data }
-    }).done(function(data) {
-        console.log(data);
-    }).fail(function() {
-        console.log("post failed");
+
+    $.post("save_classified_data" , { classified_data : JSON.stringify(data) } ,
+        function(data) {
+        if(data === "True")
+            alert("Completed!");
+        else
+            alert("Something bad happened, look into logs")
     });
 });

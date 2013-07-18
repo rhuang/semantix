@@ -42,5 +42,7 @@ def parseBusinessType(inputFile):
 		return BusinessTypeParser.parseBusinessType(inputFile, soups, nbc)
 
 # parseBusiness(settings.CPK_DATA)
-results = parseBusinessType(os.path.join(settings.APP_DATA_HTML, 'informfitness_com.txt'))
-print results
+
+#results = parseBusinessType(os.path.join(settings.APP_DATA_HTML, 'informfitness_com.txt'))
+#print results
+
