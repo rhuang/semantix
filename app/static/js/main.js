@@ -412,8 +412,16 @@ function alertSuccess(alert, cat_name) {
     alert.html("<strong>Success:</strong> Added " + cat_name + " as a new category");
     $("#directory_name").val('');
     $("#category_name").val('');
-
+    $("ul li[rel=0] a").click();
     var option = '<option>' + cat_name + '</option>';
     $(option).appendTo('#categoryA_select');
     $(option).appendTo('#categoryB_select');
 }
+
+$("#modal_close_btn").click(function(event) {
+    $('#create_category_modal').modal('toggle');
+    var alert = $("#modal_alert");
+    alert.removeClass("alert-error alert-success").addClass("alert-info");
+    alert.html("<strong>Note:</strong> A directory and category name must be provided!");
+    $("ul li[rel=0] a").click();
+});
