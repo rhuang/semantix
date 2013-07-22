@@ -1,4 +1,5 @@
 import re
+import collections
 
 # Go through list of all categories and finds the category with highest total probability.
 def getHighestProbability(allCategories):
@@ -19,7 +20,7 @@ def getHighestProbability(allCategories):
                 highestProbability = probabilities[categoryIndex]
 
     returnIndex = probabilities.index(highestProbability)
-    
+  
     highestProbCategory = []
     highestProbCategory.append(uniqueCategories[returnIndex])
     highestProbCategory.append(highestProbability)
@@ -51,7 +52,9 @@ def highestFrequency(labels):
             for probability in frequencies[label]['probabilities']:
                 averageProbability += probability
             averageProbability /= frequency
-            result = [label, averageProbability]
+
+            businessTypeLabel = collections.namedtuple('BusinessTypeLabel', ['businessLabel', 'businessAverageProbability'])
+            result = businessTypeLabel(label, averageProbability)
 
     """
     # For testing.
@@ -67,4 +70,6 @@ def parseBusinessType(businessFile, soups, nbc):
     labels = []
     for soup in soups:
         labels.append(nbc.classify(soup.getText()))
-    return [businessFile, highestFrequency(labels)]
+    businessTypeTuple = collections.namedtuple('BusinessType', ['businessFile', 'businessTypeLabel'])
+
+    return businessTypeTuple(businessFile,highestFrequency(labels))

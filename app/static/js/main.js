@@ -1,9 +1,48 @@
+
+
+// on enter while on search
+$("#search").keyup(function(event){
+    var enterKey = 13
+    if(event.keyCode == enterKey ){
+        $(".search-button").click();
+    }
+});
+
 $('.search-button').on('click', function(evt){
+
+    var website = $("#search").val().toString();
+    $('.data-wrap').addClass('hide');
+    // do some more sanity check to ensure its a valid URL before going into this
+    if(website.indexOf("www") != -1){
+        var dotOperatorAtIndex = 4;
+        var websiteName = website.substring(dotOperatorAtIndex);
+        websiteName = websiteName.replace(".","_");
+
+        $.get("classify_business" , { business_name : JSON.stringify(websiteName) } ,
+        function(data) {
+
+            if(data === "Null"){
+                alert("Data not available for this website");
+            } else{
+                console.log(data)
+                data = JSON.parse(data)
+                bizType = data["businessTypeLabel"]
+                bizName = data["businessName"]
+                $('.data-name').html(bizName);
+                $('.data-business').html(bizType);
+                $('.data-wrap').removeClass('hide');
+            }
+        });
+    }
+
+    /*
     $('.data-header small').html('California Pizza Kitchen');
     $('#locationTags_tagsinput').html('Loading...');
     $('.data-name').html('California Pizza Kitchen');
-    $('.data-business').html('Restaurant');
+    
     $('.data-hours').html('Unknown');
+    */
+    /*
     $.ajax({
         url: '/locations',
     }).done(function(addresses){
@@ -28,7 +67,8 @@ $('.search-button').on('click', function(evt){
     		'style="color: rgb(102, 102, 102); width: 12px;"></div></div>';
     	$('#menuTags_tagsinput').html(menuHTML);
     });
-    $('.data-wrap').removeClass('hide');
+    
+    */
 });
 
 //this is the data that is obtained by making a call to 

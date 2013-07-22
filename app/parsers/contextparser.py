@@ -20,7 +20,6 @@ def parseSingleSoup(soup, contextMap, nbc):
                         finalText += str(re.sub(r'\s+', ' ', text))            
 
             if finalText:
-                #category = "test " 
                 category = nbc.classify(finalText)
                 # add into hash map
                 if contextMap.get(category) is not None:
