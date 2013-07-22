@@ -6,6 +6,8 @@ From a list of labels and their frequencies, retrieve the label with highest fre
 average probability of that label.
 """
 def highestFrequency(labels):
+
+
     frequencies = {}
     # Go through labels and create a frequency map.
     for label in labels:
@@ -19,6 +21,13 @@ def highestFrequency(labels):
     # Get the result with highest frequency and calculate its average probability.
     result = []
     highest = 0
+    
+    '''
+    # For testing.
+    for label in frequencies:
+        print '%s | %s' % (label, frequencies[label]['frequency'])
+    '''
+    
     for label in frequencies:
         frequency = frequencies[label]['frequency']
         if frequency > highest:
@@ -28,19 +37,15 @@ def highestFrequency(labels):
             for probability in frequencies[label]['probabilities']:
                 averageProbability += probability
             averageProbability /= frequency
+            result =  {'label': label, 'probability': averageProbability}
 
-            return {'label': label, 'probability': averageProbability}
-    """
-    # For testing.
-    for label in frequencies:
-        print '%s | %s' % (label, frequencies[label]['frequency'])
-    """
     return result
 
 """
 Get the business type of the business file.
 """
 def parse(businessFile, soups, nbc):
+
     labels = []
     for soup in soups:
         labels.append(nbc.classify(soup.getText()))
