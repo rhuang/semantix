@@ -55,6 +55,7 @@
                 </div>
             </div>
             
+            <!-- Container with all the tags -->
             <div id="draggable_container" class="row">
                 <div class="span6 data-item noRightMargin">
                     <div id="catATags_tagsinput" class="tagsinput droppable connectedSortable"></div>
@@ -63,6 +64,36 @@
                     <div id="catBTags_tagsinput" class="tagsinput droppable connectedSortable"></div>
                 </div>
             </div>
+
+            <!-- Modal -->
+            <div id="create_category_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <h4 id="myModalLabel">Add New Category</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="modal_alert" class="alert-info">
+                        <strong>Note:</strong> A directory and category name must be provided!
+                    </div>
+                    <form>
+                        <label>Directory Name:</label>
+                        <input type="text" name="directory_name" id="directory_name" placeholder="Name of new directory" class="text ui-widget-content ui-corner-all span4" />
+                        <div class="center-text small-margin-bottom">OR</div>
+                        <select id="directory_select"></select>
+                        <hr/>
+                        <label>Category Name:</label>
+                        <input type="text" name="category_name" id="category_name" placeholder="Name of new category" class="text ui-widget-content ui-corner-all span4" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="span1 modal-button">
+                        <button class="btn btn-small btn-block" data-dismiss="modal" aria-hidden="true">Close</button>
+                    </div>
+                    <div class="span1 modal-button">
+                        <button id="add_new_cat_btn" class="btn btn-block btn-primary btn-small">Add</button>
+                    </div>
+                </div>
+            </div>    
+
         </div>
     </div>
 {% endblock %}

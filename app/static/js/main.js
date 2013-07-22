@@ -76,17 +76,20 @@ $('.search-button').on('click', function(evt){
 //businesscategories.getCategories()
 var data;
 var selectOptionsHTML='';
+var selectOptionsNewCategory='';
 $(function() {
     $.ajax({
         url: '/business_categories',
     }).done(function(get_request){
         selectOptionsHTML += '<option>Select Category</option>';
+        selectOptionsNewCategory += '<option>Select Existing Directory</option>';
         data = JSON.parse(get_request);
         $.each(data, function(key, val){
             recursiveFunction(key, val);
         });
         $('#categoryA_select').html(selectOptionsHTML);
         $('#categoryB_select').html(selectOptionsHTML);
+        $('#directory_select').html(selectOptionsNewCategory);
         $("select").selectpicker({
             style: 'btn-inverse',
             menuStyle: 'dropdown-inverse'
@@ -99,6 +102,7 @@ function recursiveFunction(key, val) {
     if (val instanceof Array) {
         makeOption(key);
     } else if (val instanceof Object) {
+        makeDirOption(key);
         $.each(val, function(key, value) {
             recursiveFunction(key, value);
         });
@@ -109,6 +113,12 @@ function recursiveFunction(key, val) {
 //simply makes html that will be put into the select element
 function makeOption(key) {
     selectOptionsHTML += '<option>' + key + '</option>';
+}
+
+//helper for recursiveFunction
+//simply makes html that will be put into the directory select in modal
+function makeDirOption(key) {
+    selectOptionsNewCategory += '<option>' + key + '</option>';
 }
 
 //This makes the two main boxes with the draggable items droppable
@@ -185,13 +195,53 @@ function searchForLocationAndAdd(item, obj, to) {
 
 //This function helps to find the words that will be made into
 //draggable tags when something from the dropdown menu is selected
-var wordsList
+var wordsList = [];
 function searchForKey(key, obj) {
     $.each(obj, function(term, val){
         if(key == term && $.isArray(val)) {
             wordsList = val;
         } else if(!$.isArray(val)) {
             searchForKey(key, val);
+        }
+    });
+}
+
+//simply checks whether obj has this key
+//returns true if it does exist
+var keyExists = false;
+function startKeySearch(key, obj) {
+    keyExists = false;
+    doesKeyExist(key, obj);
+}
+
+function doesKeyExist(key, obj) {
+    $.each(obj, function(term, val){
+        if(key == term && !$.isArray(val)) {
+            keyExists = true;
+        } else if(!$.isArray(val)) {
+            doesKeyExist(key, val);
+        }
+    });
+}
+
+//simply adds the category to the directory if the category does
+//not exists already
+var catAlreadyExists = false;
+function startAddingCategoryToDir(cat, dir, obj) {
+    catAlreadyExists = false;
+    addCategoryToDirectory(cat, dir, obj);
+}
+
+function addCategoryToDirectory(cat, dir, obj) {
+    $.each(obj, function(term, val){
+        if(dir == term && !$.isArray(val)) {
+            if(cat in val) {
+                catAlreadyExists = true;
+            } else {
+                val[cat] = [];
+            }
+        } else if(!$.isArray(val)) {
+            addCategoryToDirectory(cat, dir, val);
         }
     });
 }
@@ -285,7 +335,6 @@ $('.input_container_A').keypress(function(event){
     }
 });
 
-
 $('#add_categoryA_label').click(function(event) {
     var $input = $(event.target).siblings('input');
     var label = $input.val();
@@ -308,13 +357,61 @@ $('#add_categoryB_label').click(function(event) {
     $input.val('');
 });
 
+//This is the save button on top of the page it make a post request to save
+//all the current data
 $("#save_button").click(function(event) {
-
     $.post("save_classified_data" , { classified_data : JSON.stringify(data) } ,
-        function(data) {
-        if(data === "True")
+        function(response) {
+        if(response === "True")
             alert("Completed!");
         else
-            alert("Something bad happened, look into logs")
+            alert("Something bad happened, look into logs");
     });
 });
+
+//specifying a dir puts it in '/' which is the Training directory
+//OR you can select an existing directory from drop down
+$("#new_category_button").click(function(event) {
+    $('#create_category_modal').modal();
+});
+
+$("#add_new_cat_btn").click(function(event) {
+    var dir_name_input = $("#directory_name").val();
+    var dir_name_select = $("#directory_select").val();
+    var cat_name = $("#category_name").val();
+    var alert = $("#modal_alert");
+
+    if (dir_name_input.length != 0 && cat_name.length != 0) {
+        startKeySearch(dir_name_input, data);
+        if(keyExists) {
+            alert.removeClass("alert-info alert-success").addClass("alert-error");
+            alert.html("<strong>Error:</strong> Directory already exists!");
+        } else {
+            data[dir_name_input] = {};
+            data[dir_name_input][cat_name] = [];
+            alertSuccess(alert, cat_name);
+        }
+    } else if(dir_name_select != "Select Existing Directory" && cat_name.length != 0) {
+        startAddingCategoryToDir(cat_name, dir_name_select, data);
+        if(catAlreadyExists) {
+            alert.removeClass("alert-info alert-success").addClass("alert-error");
+            alert.html("<strong>Error:</strong> Category already exists in directory!");
+        } else {
+            alertSuccess(alert, cat_name);
+        }
+    } else {
+        alert.removeClass("alert-info alert-success").addClass("alert-error");
+        alert.html("<strong>Error:</strong> Missing name. Please provide a directory and category!");
+    }
+});
+
+function alertSuccess(alert, cat_name) {
+    alert.removeClass("alert-error alert-info").addClass("alert-success");
+    alert.html("<strong>Success:</strong> Added " + cat_name + " as a new category");
+    $("#directory_name").val('');
+    $("#category_name").val('');
+
+    var option = '<option>' + cat_name + '</option>';
+    $(option).appendTo('#categoryA_select');
+    $(option).appendTo('#categoryB_select');
+}
