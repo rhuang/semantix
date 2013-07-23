@@ -228,22 +228,34 @@ function doesKeyExist(key, obj) {
 
 //simply adds the category to the directory if the category does
 //not exists already
+//the catDirDir flag if true means create another directory in the found directory
 var catAlreadyExists = false;
-function startAddingCategoryToDir(cat, dir, obj) {
+var dirAlreadyExists = false;
+function startAddingCategoryToDir(dir1, dir2, cat, obj, catDirDir) {
     catAlreadyExists = false;
-    addCategoryToDirectory(cat, dir, obj);
+    dirAlreadyExists = false;
+    addCategoryToDirectory(dir1, dir2, cat, obj, catDirDir);
 }
 
-function addCategoryToDirectory(cat, dir, obj) {
+function addCategoryToDirectory(dir1, dir2, cat, obj, flag) {
     $.each(obj, function(term, val){
-        if(dir == term && !$.isArray(val)) {
-            if(cat in val) {
-                catAlreadyExists = true;
+        if(dir1 == term && !$.isArray(val)) {
+            if(flag) {
+                if(dir2 in val) {
+                    dirAlreadyExists = true;
+                } else {
+                    val[dir2] = {};
+                    val[dir2][cat] = [];
+                }
             } else {
-                val[cat] = [];
+                if(cat in val) {
+                    catAlreadyExists = true;
+                } else {
+                    val[cat] = [];
+                }
             }
         } else if(!$.isArray(val)) {
-            addCategoryToDirectory(cat, dir, val);
+            addCategoryToDirectory(dir1, dir2, cat, val, flag);
         }
     });
 }
@@ -362,14 +374,27 @@ $('#add_categoryB_label').click(function(event) {
 //This is the save button on top of the page it make a post request to save
 //all the current data
 $("#save_button").click(function(event) {
-    $.post("save_classified_data" , { classified_data : JSON.stringify(data) } ,
+    $.post(
+        "save_classified_data",
+        {classified_data : JSON.stringify(data)},
         function(response) {
-        if(response === "True")
-            alert("Completed!");
-        else
-            alert("Something bad happened, look into logs");
-    });
+            if(response === "True") {
+                $('#save_popover_success').popover('show');
+                setTimeout(function(){
+                    $('#save_popover_success').popover('hide');
+                }, 2500);
+            } else {
+                $('#save_popover_fail').popover('show');
+                setTimeout(function(){
+                    $('#save_popover_fail').popover('hide');
+                }, 2500);
+            }
+        }
+    );
 });
+
+$('#save_popover_success').popover();
+$('#save_popover_fail').popover();
 
 //specifying a dir puts it in '/' which is the Training directory
 //OR you can select an existing directory from drop down
@@ -382,40 +407,79 @@ $("#add_new_cat_btn").click(function(event) {
     var dir_name_select = $("#directory_select").val();
     var cat_name = $("#category_name").val();
     var alert = $("#modal_alert");
+    var firstOption = "Select Existing Directory";
 
-    if (dir_name_input.length != 0 && cat_name.length != 0) {
-        startKeySearch(dir_name_input, data);
-        if(keyExists) {
-            alert.removeClass("alert-info alert-success").addClass("alert-error");
-            alert.html("<strong>Error:</strong> Directory already exists!");
-        } else {
-            data[dir_name_input] = {};
-            data[dir_name_input][cat_name] = [];
-            alertSuccess(alert, cat_name);
-        }
-    } else if(dir_name_select != "Select Existing Directory" && cat_name.length != 0) {
-        startAddingCategoryToDir(cat_name, dir_name_select, data);
-        if(catAlreadyExists) {
-            alert.removeClass("alert-info alert-success").addClass("alert-error");
-            alert.html("<strong>Error:</strong> Category already exists in directory!");
-        } else {
-            alertSuccess(alert, cat_name);
+    if(cat_name.length != 0) {
+        if(dir_name_input.length != 0 && dir_name_select != firstOption) {
+            startKeySearch(dir_name_input, data);
+            if(keyExists) {
+                alertErrorDirExists(alert);
+            } else {
+                startAddingCategoryToDir(dir_name_select, dir_name_input, cat_name, data, /*catDirDir = */true);
+                if(catAlreadyExists) {
+                    alertErrorCatExists(alert);
+                } else if(dirAlreadyExists) {
+                    alertErrorDirExists(alert);
+                } else {
+                    alertSuccess(alert, cat_name, dir_name_input);
+                }
+            }
+        } else if (dir_name_input.length != 0) {
+            startKeySearch(dir_name_input, data);
+            if(keyExists) {
+                alertErrorDirExists(alert);
+            } else {
+                data[dir_name_input] = {};
+                data[dir_name_input][cat_name] = [];
+                alertSuccess(alert, cat_name, dir_name_input);
+            }
+        } else if(dir_name_select != firstOption) {
+            startAddingCategoryToDir(dir_name_select, null, cat_name, data, /*catDirDir = */false);
+            if(catAlreadyExists) {
+                alertErrorCatExists(alert);
+            } else {
+                alertSuccess(alert, cat_name, dir_name_select);
+            }
         }
     } else {
-        alert.removeClass("alert-info alert-success").addClass("alert-error");
-        alert.html("<strong>Error:</strong> Missing name. Please provide a directory and category!");
+        alertErrorMissingName(alert);
     }
 });
 
-function alertSuccess(alert, cat_name) {
+//shows the success message on the dialog 
+//also adds this new directory to the drop down in modal
+//also adds new category to choose from in the trainer
+function alertSuccess(alert, cat_name, dir_name) {
     alert.removeClass("alert-error alert-info").addClass("alert-success");
     alert.html("<strong>Success:</strong> Added " + cat_name + " as a new category");
     $("#directory_name").val('');
     $("#category_name").val('');
     $("ul li[rel=0] a").click();
     var option = '<option>' + cat_name + '</option>';
+    var optionForNewDirectory = '<option>' + dir_name + '</option>';
     $(option).appendTo('#categoryA_select');
     $(option).appendTo('#categoryB_select');
+    $(optionForNewDirectory).appendTo('#directory_select');
+}
+
+function alertErrorDirExists(alert) {
+    alert.removeClass("alert-info alert-success").addClass("alert-error");
+    alert.html("<strong>Error:</strong> New directory name already exists!");
+}
+
+function alertErrorMissingName(alert) {
+    alert.removeClass("alert-info alert-success").addClass("alert-error");
+    alert.html("<strong>Error:</strong> Missing name. Please provide a directory and category name!");
+}
+
+function alertErrorCatExists(alert) {
+    alert.removeClass("alert-info alert-success").addClass("alert-error");
+    alert.html("<strong>Error:</strong> Category name already exists in selected directory!");
+}
+
+function alertErrorCatExists(alert) {
+    alert.removeClass("alert-info alert-success").addClass("alert-error");
+    alert.html("<strong>Error:</strong> New directory name already exists in selected directory!");
 }
 
 $("#modal_close_btn").click(function(event) {
@@ -425,3 +489,6 @@ $("#modal_close_btn").click(function(event) {
     alert.html("<strong>Note:</strong> A directory and category name must be provided!");
     $("ul li[rel=0] a").click();
 });
+
+
+

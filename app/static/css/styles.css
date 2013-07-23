@@ -147,3 +147,13 @@ div.modal-button {
 
 .modal { overflow: hidden; }
 .modal-body { overflow-y: scroll; }
+
+
+h3.popover-title {
+    background-color: #34495e;
+}
+
+div.popover-content {
+    padding:9px 14px;
+    color:black;
+}
