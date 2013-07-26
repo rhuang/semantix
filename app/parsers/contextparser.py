@@ -36,6 +36,7 @@ def parseSingleSoup(soup, contextMap, nbc):
 # Output        - A map that contains all classification types as keys, with their respective values as a list of text 
 
 def parseSoups(soups, nbc):
+    
     nbc.demo()
     contextMap = {}
     for soup in soups:
@@ -47,7 +48,10 @@ def parseSoups(soups, nbc):
             print (key, value)
             print '\n'
     print '\n======================================================================\n'
+    '''
+    
 
+    '''
     for key, value in contextMap.items():
         if float(key[1]) < 0.9 and key[0] is 'noise':
             print (key, value)

@@ -22,7 +22,7 @@ import os
 def recurseAndApplyData(map, path):
     for key, value in map.iteritems():
         if isinstance(value, dict):
-            recurseAndApplyData(value, os.path.join(path, key))
+            recurseAndApplyData(value, os.path.join(path, key)) 
         else:
             if not os.path.exists(path):
                 os.makedirs(path)

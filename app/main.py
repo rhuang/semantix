@@ -27,7 +27,7 @@ def parseBusinessData(parsedJSON):
     # taking bests.
 
 """
-Identify the business type of the business JSON data.
+Identify the business type of the business JSON data0.29782.
 @return ("Business", ["name", "type"])
 """
 def parseBusinessType(parsedJSON):
@@ -90,6 +90,14 @@ def parse(inputFile):
     Business = namedtuple("Business", ["name", "type", "menu"])
     return Business(businessType.name, businessType.type, menuItems)
 
+
+#business = parseBusinessType(os.path.join(settings.APP_DATA_HTML, 'partymixnyc_com.txt'))
+#print (business.file, business.type.label, business.type.probability)
+
+#business = parseBusiness(os.path.join(settings.APP_DATA_HTML, "alexandregallery_com.txt"))
+nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, 'general'), settings.APP_DATA_COMMON_WORDS)
+nbc.demo();
+
 # business = parse(os.path.join(settings.APP_DATA_HTML, "cpk_com.txt"))
 
 #nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, "general"))
@@ -110,4 +118,5 @@ for businessFile in listdir(settings.APP_DATA_HTML):
 for result in results:
     print result
 """
+
 
