@@ -10,3 +10,7 @@ APP_DATA_COMMON_WORDS = os.path.join(APP_DATA, 'common_words')
 ###### HTML DATA ASSETS ######
 
 CPK_DATA = os.path.join(APP_DATA_HTML, 'cpk_com.txt')
+
+
+###### COUNTRIES SPLIT BY STATE/COUNTRIES/ADDRESSES
+COUNTRIES = os.path.join(APP_DATA, 'countries')

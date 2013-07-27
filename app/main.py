@@ -60,12 +60,9 @@ def saveTrainingFileToSet(inputFile):
 
 def parseLocations(businessData):
     # Read in countries and state information.
-    countries = saveTrainingFileToSet(os.path.join(settings.APP_DATA_TRAINING, \
-        "general/location/countries"))
-    states = saveTrainingFileToSet(os.path.join(settings.APP_DATA_TRAINING, \
-        "general/location/states"))
-    addresses = saveTrainingFileToSet(os.path.join(settings.APP_DATA_TRAINING, \
-        "general/location/addresses"))
+    countries = saveTrainingFileToSet(os.path.join(settings.COUNTRIES,"countries"))
+    states = saveTrainingFileToSet(os.path.join(settings.COUNTRIES,"states"))
+    addresses = saveTrainingFileToSet(os.path.join(settings.COUNTRIES,"addresses"))
     # The threshold the string has to hit before we accept it as a valid location.
     threshold = 4
 
@@ -109,17 +106,21 @@ def parse(inputFile):
     Business = namedtuple("Business", ["name", "type", "data", "menu", "locations"])
     return Business(businessType.name, businessType.type, businessData, menuItems, locations)
 
-"""
-business = parse(os.path.join(settings.APP_DATA_HTML, "alexandregallery_com.txt"))
+
+
+business = parse(os.path.join(settings.APP_DATA_HTML, "cpk_com.txt"))
+
 print business.name
 print business.type
 print business.locations
 
+"""
 # Prints out all attributes from general that have been classified.
 for key, value in business.data.items():
     print "----------------------------------------"
     print key, list(set(value))
-"""
+
 nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, "general"), settings.APP_DATA_COMMON_WORDS)
 nbc.demo();
+"""
 
