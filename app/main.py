@@ -21,17 +21,17 @@ Parses the business JSON data for a dict of labels and items.
         {"label": ["item1", "item2"]}
 """
 def parseBusinessData(parsedJSON):
-    nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, "general"))
+    nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, "general"), settings.APP_DATA_COMMON_WORDS)
     return ContextParser.parseSoups(parsedJSON.soups, nbc)
     # NOTE: contextMap may have repeats of similar texts, it needs to run through string comparison
     # taking bests.
 
 """
-Identify the business type of the business JSON data0.29782.
+Identify the business type of the business JSON data
 @return ("Business", ["name", "type"])
 """
 def parseBusinessType(parsedJSON):
-    nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, "businesses"))
+    nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, "businesses"), settings.APP_DATA_COMMON_WORDS)
     # Our data files are .txt files for now.
     businessTuple = namedtuple("Business", ["name", "type"])
     businessTuple.name = parsedJSON.name
@@ -79,44 +79,32 @@ def parseLocations(businessData):
                     for token in tokenized:
                         if token in countries: currentThreshold += 1
 
-                    print "%s, %s, %s" % (location, label.probability, len(tokenized))
-
 def parse(inputFile):
     parsedJSON = JsonParser.parseData(inputFile)
     businessData = parseBusinessData(parsedJSON)
     businessType = parseBusinessType(parsedJSON)
     locations = parseLocations(businessData)
     menuItems = parseMenuItems(businessData)
-    Business = namedtuple("Business", ["name", "type", "menu"])
-    return Business(businessType.name, businessType.type, menuItems)
+    Business = namedtuple("Business", ["name", "type","data", "menu"])
+    return Business(businessType.name, businessType.type, businessData, menuItems)
 
 
-#business = parseBusinessType(os.path.join(settings.APP_DATA_HTML, 'partymixnyc_com.txt'))
-#print (business.file, business.type.label, business.type.probability)
+business = parse(os.path.join(settings.APP_DATA_HTML, "alexandregallery_com.txt"))
+print business.name
+print business.type
 
-#business = parseBusiness(os.path.join(settings.APP_DATA_HTML, "alexandregallery_com.txt"))
+
+## this prints out all attributes from general that have been classified
+
+for key, value in business.data.items():
+    print "----------------------------------------"
+    print key, list(set(value))
+
+
+
+## uncomment this to do tests on demo
+'''
 nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, 'general'), settings.APP_DATA_COMMON_WORDS)
 nbc.demo();
-
-# business = parse(os.path.join(settings.APP_DATA_HTML, "cpk_com.txt"))
-
-#nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, "general"))
-#nbc.demo()
-
-"""
-business = parseBusinessType(os.path.join(settings.APP_DATA_HTML, "townhouseny_com.txt"))
->>>>>>> Stashed changes
-print (business.file, business.type.label, business.type.probability)
-"""
-
-"""
-results = []
-for businessFile in listdir(settings.APP_DATA_HTML):
-    business = parseBusinessType(os.path.join(settings.APP_DATA_HTML, businessFile))
-    if business:
-        results.append((business.file, business.type.label, business.type.probability))
-for result in results:
-    print result
-"""
-
-
+'''
+### / uncommend this to do tests on demo

@@ -18,8 +18,9 @@ def highestFrequency(labels):
     
     
     # For testing.
-    for label in frequencies:
-        print '%s | %s' % (label, frequencies[label]['frequency'])
+    #
+    #for label in frequencies:
+    #    print '%s | %s' % (label, frequencies[label]['frequency'])
     
     
     # Calculate the average probability from the frequencies as well as the weight to get the 
@@ -47,13 +48,13 @@ Get the business type of the business file.
 def parse(soups, nbc):
     labels = []
     for soup in soups:
-        print "------------------------------------------------------------------------------"
-        print soup.getText()
+        #print "------------------------------------------------------------------------------"
+        #print soup.getText()
         labels.append(nbc.classify(soup.getText()))
 
 
-    for label in labels:
-        print label
+    #for label in labels:
+    #    print label
 
     label = highestFrequency(labels)
     businessType = namedtuple('Type', ['label', 'probability'])

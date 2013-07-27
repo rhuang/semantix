@@ -37,24 +37,7 @@ def parseSingleSoup(soup, contextMap, nbc):
 
 def parseSoups(soups, nbc):
     
-    nbc.demo()
     contextMap = {}
     for soup in soups:
         parseSingleSoup(soup, contextMap, nbc)
-    
-    '''
-    for key, value in contextMap.items() :
-        if float(key[1]) > 0.9 and key[0] is not 'noise':
-            print (key, value)
-            print '\n'
-    print '\n======================================================================\n'
-    '''
-    
-
-    '''
-    for key, value in contextMap.items():
-        if float(key[1]) < 0.9 and key[0] is 'noise':
-            print (key, value)
-            print '\n'
-    ''' 
     return contextMap

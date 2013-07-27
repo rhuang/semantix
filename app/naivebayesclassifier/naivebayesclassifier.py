@@ -1,14 +1,8 @@
-import os
-import sys
-import re
-from nltk.probability import ELEProbDist, FreqDist
-import nltk
+import os, sys, re
 from nltk.probability import ELEProbDist, FreqDist, DictionaryProbDist, sum_logs, _NINF
-from collections import defaultdict
+from collections import defaultdict,namedtuple
 from os import listdir
 from os.path import isfile, join
-from collections import namedtuple
-import re
 
 """
 Example:
@@ -49,7 +43,7 @@ class NaiveBayesClassifier:
             self._trainingSet[item].extend(labels)
 
     '''returns a list of common words extracted from the common words directory'''
-    '''ensure that none of the tokens in the training or input get higher ratings based on common words'''
+    '''ensures that none of the tokens in the training or input get higher ratings based on common words'''
     def _getCommonWords(self, commonWordsDirectory):
         commonwords = [] 
         for root,dirs,files in os.walk(commonWordsDirectory):
@@ -101,19 +95,17 @@ class NaiveBayesClassifier:
     """
     Tokenize the input, perform some label specific feature work, and assign to kvp with
     value of true.
+    Generates the features set for the input data
     """
     def _tokenizeInputToFeatures(self, item):
 
-        words = filter(None, re.split("[ .,-?!]", item))
-
+        words = filter(None, re.split("[ ?!.,-]", item))
         splits = {}
 
         # Location feature.
         ordinals = ['st', 'nd', 'rd', 'th']
 
         for word in words:
-
-
             if word not in self._commonwords :
 
                 """
@@ -134,7 +126,7 @@ class NaiveBayesClassifier:
 
         return splits
 
-    """ Generates the features set. """
+    """ Generates the features set for the training data """
     def _generateFeaturesSet(self):
         def generateDefaultFreq():
             frequencies = {}
@@ -154,19 +146,6 @@ class NaiveBayesClassifier:
                     for label in labels:
                         featuresSet[token][label] += 1
         self._featuresSet = featuresSet
-
-    """ Generates expected likelihood distribution for labels. """
-    def _generateLabelProbabilityDistribution(self):
-        # Print this out to look at how many items were trained for each label.
-        labelFrequencies = FreqDist()
-        for item, counts in self._featuresSet.items():
-
-            for label in self.labels:
-                if counts[label] > 0:
-                    labelFrequencies.inc(label)
-
-        print "label probability distribution of training data " + str(labelFrequencies)
-        self._labelProbabilityDistribution = ELEProbDist(labelFrequencies)
 
     """ Generates expected likelihood distribution for features. """
     def _generateFeatureProbabilityDistribution(self):
@@ -196,114 +175,99 @@ class NaiveBayesClassifier:
         self._trainingDirectory = trainingDirectory
         self._generateTrainingSet()
         self._generateFeaturesSet()
-        self._generateLabelProbabilityDistribution()
         self._generateFeatureProbabilityDistribution()
-        self._classifier = nltk.NaiveBayesClassifier(self._labelProbabilityDistribution, self._featureProbabilityDistribution)
 
 
+    """ Classify an item"""
+    """ returns a tuple of best classified label with its probability"""
+    def classify(self, input): 
 
-    """ Classify an item. """
-    def classify(self, item):
-        item = item.lower()
-        tokenizedInput = self._tokenizeInputToFeatures(item)
-        label = self._classifier.classify(tokenizedInput)        
+        input = input.lower()
+        inputFeatureSet = self._tokenizeInputToFeatures(input)
+        classifiedDataTuple = namedtuple('ClassifiedData', ['label', 'probability'])
 
-        print "feature set is " + str(tokenizedInput)
-        print "labels are " + str (self._classifier.labels())
+        probabilityDistribution = self.prob_classify(inputFeatureSet)
+        label = probabilityDistribution.max()                       # max is taking the label with highest probability
+        probability = probabilityDistribution.prob(label)           # getting its probability
 
-        
-        data = namedtuple('ClassifiedData', ['label', 'probability'])
-        return data(label, self._classifier.prob_classify(tokenizedInput).prob(label))
+        return classifiedDataTuple(label, probability)
 
-    """ Print some demo items. """
-    def demo(self):
-        testingSet = {
-        
-            'We are at 444 Weber Street, CA',
-            'steak bread hot dog',
-            '888 Socks Drive, CA',
-           'chicken broccoli',
-            '8 oz steak',
-            'turkey club',
-            "9:00 aM",
-            "pm canada facebook",
-            "8:00 AM to 9:00 PM",
-            "6th street",
-            "Mona Lisa"
-            
-        }
-        for item in testingSet:
-            probs = {}
-
-            #testing
-            item = item.lower()
-            tokenizedInput = self._tokenizeInputToFeatures(item)
-
-            print "-------------------------------------------------------"
-            print "for item " + str(item)
-            trialData = self.trialClassify(tokenizedInput)
-            #end testing
-
-
-            #data = self.classify(item)
-
-            
-            #print '%s | %s | %s ' % (item, data.label, data.probability)
-            
-            '''
-            for label in self.labels:
-                probs[label] = round(self._classifier.prob_classify(self._tokenizeInputToFeatures(item.lower())).prob(label), 2)
-            print '%s | %s | %s | %s' % (item, data.label, data.probability, probs)
-            '''
-            
-            
-        print '\n'
-
-
+    def prob_classify(self, featureset):
     
-    def trialClassify(self, featureset):
-        
         featureset = featureset.copy() 
         for fname in featureset.keys(): 
-            for label in self._classifier.labels(): 
+            for label in self.labels: 
                 if (label, fname) in self._featureProbabilityDistribution: 
                     break 
             else: 
                 #print 'Ignoring unseen feature %s' % fname 
                 del featureset[fname] 
 
-        # Find the log probabilty of each label, given the features. 
-        # Start with the log probability of the label itself. 
+        # Start with a log probability of 0 to avoid skewing towards larger data sets
         logprob = {} 
-        for label in self._classifier.labels(): 
-            logprob[label] = self._labelProbabilityDistribution.logprob(label) 
+        for label in self.labels: 
+            logprob[label] = 0                 
 
+        # Add in the log probability of features given labels. 
 
-        print "log prob with just labels is " + str(logprob)
-    
-        # Then add in the log probability of features given labels. 
-
-        for label in self._classifier.labels(): 
+        for label in self.labels: 
             for (fname, fval) in featureset.items(): 
 
-                #print fval
                 if (label, fname) in self._featureProbabilityDistribution: 
                     feature_probs = self._featureProbabilityDistribution[label,fname] 
-
-                    #print "log prob value is" + str(feature_probs.logprob(fval) )
+                    #print "log prob for " + str(label) +  " is " + str(feature_probs.logprob(fval) )
                     logprob[label] += feature_probs.logprob(fval) 
                 else: 
-                # nb: This case will never come up if the 
-                # classifier was created by 
-                # NaiveBayesClassifier.train(). 
+                # nb: This case will never come up if the classifier was created by NaiveBayesClassifier.train(). 
                     logprob[label] += sum_logs([]) # = -INF.
         
-
+        ## print out the log prob for each label before normalizing
         #for key,value in  self._featureProbabilityDistribution.items():
         #    print "key value of featureProbabilityDistribution " + str(key) + "," + str(value.freqdist() )
 
-        print "log prob with features is " + str(logprob)    
+        #print "log prob with features is " + str(logprob)    
         dictprobDist = DictionaryProbDist(logprob, normalize=True, log=True)
 
-        for label in dictprobDist.samples():
-            print label + " is probability " + str(dictprobDist.prob(label))
+        ## print out the probability for each label
+        #for label in dictprobDist.samples():
+        #    print label + " is probability " + str(dictprobDist.prob(label))
+
+        return dictprobDist
+
+
+    """ Print some demo items. """
+    def demo(self):
+        testingSet = {
+            
+            'We are at 444 Weber Street, CA',
+            'steak bread hot dog',
+            '888 Socks Drive, CA',
+            'chicken broccoli',
+            '8 oz steak',
+            'turkey club',
+            "9:00 aM",
+            "pm canada facebook",
+            "8:00 AM to 9:00 PM",
+            "6th street",
+            "Mona Lisa",
+             "Margaret Magnetic North: The Landscapes of Tom Uttech Milwaukee: Milwaukee Art Museum"
+            
+        }
+        for item in testingSet:
+            probs = {}
+        
+            print "-------------------------------------------------------"
+
+            item = item.lower()
+            featureset = self._tokenizeInputToFeatures(item)
+
+            probabilityDistribution = self.prob_classify(featureset)
+            label = probabilityDistribution.max()                       # max is taking the label with highest probability
+            probability = probabilityDistribution.prob(label)           # getting its probability
+
+            for labelItem in probabilityDistribution.samples():
+                probs[labelItem] = str(probabilityDistribution.prob(labelItem))
+            print '%s | %s | %s | %s' % (item, label, probability, probs)
+
+        print '\n'
+
