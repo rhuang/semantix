@@ -154,9 +154,18 @@ def parse(inputFile):
     Business = namedtuple("Business", ["name", "type", "data", "menu", "locations"])
     return Business(businesstype.name, businesstype.type, businessData, menuItems, locations)
 
-business = parse(os.path.join(settings.APP_DATA_HTML, "cpk_com.txt"))
-for menuitem in business.menu:
-    print menuitem
+
+
+'''
+business = parse(os.path.join(settings.APP_DATA_HTML, "escada_com.txt"))
+
+print business.name
+print business.type
+# Prints out all attributes from general that have been classified.
+for key, value in business.data.items():
+    print "----------------------------------------"
+    print key, list(set(value))
+'''
 
 def demo():
     generalpath = os.path.join(settings.APP_DATA_TRAINING, "general")
@@ -168,17 +177,4 @@ def demo():
     nbc.demo()
 
 demo()
-
-
-"""
-for location in business.locations:
-    print location
-"""
-
-"""
-# Prints out all attributes from general that have been classified.
-for key, value in business.data.items():
-    print "----------------------------------------"
-    print key, list(set(value))
-"""
 

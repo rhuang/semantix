@@ -156,7 +156,7 @@ class NaiveBayesClassifier:
             eleProbDist = ELEProbDist(freqDist, bins=len(values[name]))
             probabilityDistribution[label, name] = eleProbDist
 
-        self._featureprobabilitydistribution = probabilityDistribution
+        self._featureProbabilityDistribution = probabilityDistribution
 
     """
     Classifies an item.
@@ -183,7 +183,7 @@ class NaiveBayesClassifier:
         featureset = featureset.copy() 
         for fname in featureset.keys(): 
             for label in self._labels: 
-                if (label, fname) in self._featureprobabilitydistribution: 
+                if (label, fname) in self._featureProbabilityDistribution: 
                     break 
             else: 
                 #print 'Ignoring unseen feature %s' % fname 
@@ -198,10 +198,10 @@ class NaiveBayesClassifier:
 
         for label in self._labels: 
             for (fname, fval) in featureset.items(): 
-
-                if (label, fname) in self._featureprobabilitydistribution: 
-                    feature_probs = self._featureprobabilitydistribution[label,fname] 
-                    #print "log prob for " + str(label) +  " is " + str(feature_probs.logprob(fval) )
+                
+                if (label, fname) in self._featureProbabilityDistribution: 
+                    feature_probs = self._featureProbabilityDistribution[label,fname] 
+                    #print "log prob for " + str(label) + " for string " + str(fname)+  " is " + str(feature_probs.logprob(fval) )
                     logprob[label] += feature_probs.logprob(fval) 
                 else: 
                 # nb: This case will never come up if the classifier was created by 
@@ -238,8 +238,18 @@ class NaiveBayesClassifier:
             "8:00 AM to 9:00 PM",
             "6th street",
             "Mona Lisa",
+             "Margaret Magnetic North: The Landscapes of Tom Uttech Milwaukee: Milwaukee Art Museum",
+             "Chicken & Shrimp",
+             "New Jersey - Cherry Hill Mall",
+             "CPKids Fundraisers & Activities",
+             "From a legendary pizza to a global brand",
+             "Seasonal Selection - Artichoke & Broccoli",
+             "California Pizza Kitchen - About Catering & Events",
+             "LA Food Show Grill & Bar Opens in Beverly Hills, California",
+             "Pizza & The Presidency: National Survey Reveals Leading Candidates and America's Dining Preferences"
             "Margaret Magnetic North: The Landscapes of Tom Uttech Milwaukee: Milwaukee Art Museum",
             "pizzas"
+
         }
 
         for item in testingSet:

@@ -1,32 +1,60 @@
+#
+ab
 afghanistan
+ak
+al
+alabama
+alaska
 albania
+alberta
 algeria
+american samoa
 andorra
 angola
 antigua
+apartment
+apo
+apt
+apt.
+ar
 argentina
+arizona
+arkansas
 armenia
 australia
 austria
+av
+av.
+avenue
+az
 azerbaijan
 bahamas
 bahrain
 bangladesh
 barbados
+bc
 belarus
 belgium
 belize
 benin
 bhutan
+blvd
+blvd.
 bolivia
 bosnia herzegovina
 botswana
+boulevard
+box
+boxnumber
 brazil
+british columbia
 brunei
 bulgaria
 burkina
 burma
 burundi
+ca
+california
 cambodia
 cameroon
 canada
@@ -35,19 +63,41 @@ central african republic
 chad
 chile
 china
+cir
+cir.
+circle
+co
 colombia
+colorado
 comoros
 congo
+connecticut
 costa rica
+court
+cove
 croatia
+ct
+ct.
 cuba
+cv
+cv.
 cyprus
 czech republic
+dc
+de
+delaware
 democratic republic congo
 denmark
+district of columbia
 djibouti
 dominica
 dominican republic
+dr
+dr.
+drive
+e
+e.
+east
 east timor
 ecuador
 egypt
@@ -58,7 +108,10 @@ estonia
 ethiopia
 fiji
 finland
+fl
+florida
 france
+ga
 gabon
 gambia
 georgia
@@ -66,16 +119,27 @@ germany
 ghana
 greece
 grenada
+guam
 guatemala
 guinea
 guinea-bissau
 guyana
 haiti
+hawaii
+hi
 honduras
 hungary
+ia
 iceland
+id
+idaho
+il
+illinois
+in
 india
+indiana
 indonesia
+iowa
 iran
 iraq
 ireland
@@ -85,14 +149,20 @@ ivory coast
 jamaica
 japan
 jordan
+kansas
 kazakhstan
+kentucky
 kenya
 kiribati
 korea north
 korea south
 kosovo
+ks
 kuwait
+ky
 kyrgyzstan
+la
+lane
 laos
 latvia
 lebanon
@@ -101,71 +171,176 @@ liberia
 libya
 liechtenstein
 lithuania
+ln
+ln.
+louisiana
 luxembourg
+ma
 macedonia
 madagascar
+maine
 malawi
 malaysia
 maldives
 mali
 malta
+manitoba
 marshall islands
+maryland
+massachusetts
 mauritania
 mauritius
+mb
+md
+me
 mexico
+mi
+michigan
 micronesia
+minnesota
+mississippi
+missouri
+mn
+mo
 moldova
 monaco
 mongolia
+montana
 montenegro
 morocco
 mozambique
+ms
+mt
 myanmar
+n
+n.
 namibia
 nauru
+nb
+nc
+nd
+ne
+nebraska
 nepal
 netherlands
+nevada
+new brunswick
+new hampshire
+new jersey
+new mexico
+new york
 new zealand
+newfoundland and labrador
+nh
 nicaragua
 niger
 nigeria
+nj
+nl
+nm
+north
+north carolina
+north dakota
+northern mariana islands
+northwest territories
 norway
+nova scotia
+ns
+nt
+nu
+number
+nunavut
+nv
+nw
+ny
+oh
+ohio
+ok
+oklahoma
 oman
+on
+ontario
+or
+ordinal1
+ordinal2
+ordinal3
+ordinal4
+ordinal5
+oregon
+pa
 pakistan
 palau
 panama
 papua new guinea
 paraguay
+parkway
+pe
+pennsylvania
 peru
 philippines
+pkwy
+pkwy.
+po
 poland
 portugal
+prince edward island
+puerto rico
 qatar
+qc
+quebec
+rd
+rd.
+rhode island
+ri
+rm
+rm.
+road
 romania
+room
 russian federation
 rwanda
+s
+s.
 saint vincent grenadines
 samoa
 san marino
 sao tome principe
+saskatchewan
 saudi arabia
+sc
+sd
+se
 senegal
 serbia
 seychelles
 sierra leone
 singapore
+sk
 slovakia
 slovenia
 solomon islands
 somalia
+south
 south africa
+south carolina
+south dakota
 south sudan
 spain
+sq
+sq.
+square
 sri lanka
+st
 st kitts nevis
 st lucia
+st.
+ste
+ste.
+street
 sudan
+suite
 suriname
+sw
 swaziland
 sweden
 switzerland
@@ -173,7 +348,10 @@ syria
 taiwan
 tajikistan
 tanzania
+tennessee
+texas
 thailand
+tn
 togo
 tonga
 trinidad tobago
@@ -181,220 +359,39 @@ tunisia
 turkey
 turkmenistan
 tuvalu
+tx
+u.s. virgin islands
 uganda
 ukraine
 united arab emirates
 united kingdom
 united states
 uruguay
+ut
+utah
 uzbekistan
+va
 vanuatu
 vatican city
 venezuela
-vietnam
-yemen
-zambia
-zimbabwe
-ab
-ak
-al
-alabama
-alaska
-alberta
-american samoa
-ar
-arizona
-arkansas
-az
-bc
-british columbia
-ca
-california
-co
-colorado
-connecticut
-ct
-dc
-de
-delaware
-district of columbia
-fl
-florida
-ga
-georgia
-guam
-hawaii
-hi
-ia
-id
-idaho
-il
-illinois
-in
-indiana
-iowa
-kansas
-kentucky
-ks
-ky
-la
-louisiana
-ma
-maine
-manitoba
-maryland
-massachusetts
-mb
-md
-me
-mi
-michigan
-minnesota
-mississippi
-missouri
-mn
-mo
-montana
-ms
-mt
-nb
-nc
-nd
-ne
-nebraska
-nevada
-new brunswick
-new hampshire
-new jersey
-new mexico
-new york
-newfoundland and labrador
-nh
-nj
-nl
-nm
-north carolina
-north dakota
-northern mariana islands
-northwest territories
-nova scotia
-ns
-nt
-nu
-nunavut
-nv
-ny
-oh
-ohio
-ok
-oklahoma
-on
-ontario
-or
-oregon
-pa
-pe
-pennsylvania
-prince edward island
-puerto rico
-qc
-quebec
-rhode island
-ri
-saskatchewan
-sc
-sd
-sk
-south carolina
-south dakota
-tennessee
-texas
-tn
-tx
-u.s. virgin islands
-ut
-utah
-va
 vermont
+vietnam
 virginia
 vt
+w
+w.
 wa
 washington
+way
+west
 west virginia
 wi
 wisconsin
 wv
 wy
 wyoming
+yemen
 yt
 yukon
-#
-apartment
-apo
-apt
-apt.
-av
-av.
-avenue
-blvd
-blvd.
-boulevard
-box
-boxnumber
-cir
-cir.
-circle
-court
-cove
-ct
-ct.
-cv
-cv.
-dr
-dr.
-drive
-e
-e.
-east
-lane
-ln
-ln.
-n
-n.
-ne
-north
-number
-nw
-ordinal1
-ordinal2
-ordinal3
-ordinal4
-ordinal5
-parkway
-pkwy
-pkwy.
-po
-rd
-rd.
-rm
-rm.
-road
-room
-s
-s.
-se
-south
-sq
-sq.
-square
-st
-st.
-ste
-ste.
-street
-suite
-sw
-w
-w.
-way
-west
+zambia
+zimbabwe
