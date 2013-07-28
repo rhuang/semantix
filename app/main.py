@@ -126,6 +126,7 @@ def mapping():
             if businessType == "museum_gallery": typetraining.extend(["art"])
             if businessType == "apparel": typetraining.extend(["clothing"])
             if businessType == "restaurant": typetraining.extend(["menu"])
+            if businessType == "furniture": typetraining.extend(["furniture"])
             typetraining.extend(defaulttraining)
             mapping[businessType] = typetraining
     return mapping
