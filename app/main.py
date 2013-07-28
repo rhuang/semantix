@@ -13,15 +13,16 @@ import re
 
 WINDOWS = "nt"
 reload(sys)
-sys.setdefaultencoding("utf-8")     # Set default encoding to UTF to avoid conflicts with symbols.
+# Set default encoding to UTF to avoid conflicts with symbols.
+sys.setdefaultencoding("utf-8")
 
 """
 Parses the business JSON data for a dict of labels and items.
 @return Dict where key is a label and value is an array of items for that 
         {"label": ["item1", "item2"]}
 """
-def parseBusinessData(parsedJSON):
-    nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, "general"), settings.APP_DATA_COMMON_WORDS)
+def parseBusinessData(parsedJSON, trainingfolders):
+    nbc = NaiveBayesClassifier(trainingfolders, settings.APP_DATA_COMMON_WORDS)
     return ContextParser.parseSoups(parsedJSON.soups, nbc)
     # NOTE: contextMap may have repeats of similar texts, it needs to run through string comparison
     # taking bests.
@@ -31,18 +32,25 @@ Identify the business type of the business JSON data.
 @return ("Business", ["name", "type"])
 """
 def parseBusinessType(parsedJSON):
-    nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, "businesses"), settings.APP_DATA_COMMON_WORDS)
+    businessespath = os.path.join(settings.APP_DATA_TRAINING, "businesses")
+    businessfolders = {}
+    for businesslabel in listdir(businessespath):
+        ignores = [".DS_Store"]
+        if businesslabel not in ignores:
+            businessfolders[businesslabel] = os.path.join(businessespath, businesslabel)
+
+    nbc = NaiveBayesClassifier(businessfolders, settings.APP_DATA_COMMON_WORDS)
     # Our data files are .txt files for now.
-    businessTuple = namedtuple("Business", ["name", "type"])
-    businessTuple.name = parsedJSON.name
-    businessTuple.type = BusinessTypeParser.parse(parsedJSON.soups, nbc)
-    return businessTuple
+    businesstuple = namedtuple("Business", ["name", "type"])
+    businesstuple.name = parsedJSON.name
+    businesstuple.type = BusinessTypeParser.parse(parsedJSON.soups, nbc)
+    return businesstuple
 
 # Filter and prune menu items.
 def parseMenuItems(businessData):
     parsedMenuItems = []
     for label, menuItems in businessData.items():
-        if label.label == "menu" and label.probability >= 0.6:
+        if getLabel(label.label) == "menu" and label.probability >= 0.6:
             for item in menuItems:
                 if len(item.split()) <= 5:
                     parsedMenuItems.append(item)
@@ -60,16 +68,16 @@ def saveTrainingFileToSet(inputFile):
 
 def parseLocations(businessData):
     # Read in countries and state information.
-    countries = saveTrainingFileToSet(os.path.join(settings.COUNTRIES,"countries"))
-    states = saveTrainingFileToSet(os.path.join(settings.COUNTRIES,"states"))
-    addresses = saveTrainingFileToSet(os.path.join(settings.COUNTRIES,"addresses"))
+    countries = saveTrainingFileToSet(os.path.join(settings.ADDRESSES, "countries"))
+    states = saveTrainingFileToSet(os.path.join(settings.ADDRESSES, "states"))
+    keywords = saveTrainingFileToSet(os.path.join(settings.ADDRESSES, "keywords"))
     # The threshold the string has to hit before we accept it as a valid location.
     threshold = 4
 
     uniqueLocations = set()
     parsedLocations = []
     for label, locations in businessData.items():
-        if label.label == "location":
+        if getLabel(label.label) == "location":
             for location in locations:
                 tokenized = filter(None, re.split("[ .,-]", location))
                 if location not in uniqueLocations and 4 <= len(tokenized) <= 10:
@@ -87,40 +95,78 @@ def parseLocations(businessData):
                                 thresholds["number"] = 1
                             if len(token) is 5 and "postalcode" not in thresholds: 
                                 thresholds["postalcode"] = 1
-                        if token in addresses and "addresses" not in thresholds:
-                            thresholds["addresses"] = 1
+                        if token in keywords and "keywords" not in thresholds:
+                            thresholds["keywords"] = 1
                     totalValue = 0
                     for key, value in thresholds.items():
                         totalValue += value
                     if totalValue >= 4:
-                        print "%s, %s, %s" % (location, label.probability, len(tokenized))
                         parsedLocations.append(location)
     return locations
 
+def getLabel(label):
+    return label[:label.index(":")]
+
+"""
+Sets up the mapping from training labels to specific general data.
+Eg. "museum_gallery": ["art", "hours", "location", "noise"]
+This is a bit more complicated than described.
+"""
+def mapping():
+    ignores = [".DS_Store"]
+
+    defaulttraining = ["hours", "location", "noise"]
+    mapping = {}
+    businessFolder = os.path.join(settings.APP_DATA_TRAINING, "businesses")
+    for businessType in listdir(businessFolder):
+        if businessType not in ignores:
+            typetraining = []
+            if businessType == "museum_gallery": typetraining.extend(["art"])
+            if businessType == "apparel": typetraining.extend(["clothing"])
+            if businessType == "restaurant": typetraining.extend(["menu"])
+            typetraining.extend(defaulttraining)
+            mapping[businessType] = typetraining
+    return mapping
+
 def parse(inputFile):
+    typemapping = mapping()
     parsedJSON = JsonParser.parseData(inputFile)
-    businessData = parseBusinessData(parsedJSON)
-    businessType = parseBusinessType(parsedJSON)
+    businesstype = parseBusinessType(parsedJSON)
+
+    # Obtain the correct general training folder mappings.
+    label = businesstype.type.label
+    # label = "museum_gallery:museum_gallery", so we have to split on first ":".
+    traininglabels = typemapping[getLabel(label)]
+    generalpath = os.path.join(settings.APP_DATA_TRAINING, "general")
+
+    # The training folders to be passed into the NBC.
+    trainingfolders = {}
+    for generallabel in listdir(generalpath):
+        if generallabel in traininglabels:
+            trainingfolders[generallabel] = os.path.join(generalpath, generallabel)
+
+    businessData = parseBusinessData(parsedJSON, trainingfolders)
+
+    # So I still need to generalize these things here, since not all businesses will need to parse
+    # menu. 
     locations = parseLocations(businessData)
     menuItems = parseMenuItems(businessData)
     Business = namedtuple("Business", ["name", "type", "data", "menu", "locations"])
-    return Business(businessType.name, businessType.type, businessData, menuItems, locations)
-
-
+    return Business(businesstype.name, businesstype.type, businessData, menuItems, locations)
 
 business = parse(os.path.join(settings.APP_DATA_HTML, "cpk_com.txt"))
+for menuitem in business.menu:
+    print menuitem
 
-print business.name
-print business.type
-print business.locations
+"""
+for location in business.locations:
+    print location
+"""
 
 """
 # Prints out all attributes from general that have been classified.
 for key, value in business.data.items():
     print "----------------------------------------"
     print key, list(set(value))
-
-nbc = NaiveBayesClassifier(os.path.join(settings.APP_DATA_TRAINING, "general"), settings.APP_DATA_COMMON_WORDS)
-nbc.demo();
 """
 
