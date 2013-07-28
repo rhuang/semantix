@@ -105,7 +105,9 @@ def parseLocations(businessData):
     return locations
 
 def getLabel(label):
-    return label[:label.index(":")]
+    if ":" in label:
+        return label[:label.index(":")]
+    return label
 
 """
 Sets up the mapping from training labels to specific general data.
@@ -135,6 +137,7 @@ def parse(inputFile):
 
     # Obtain the correct general training folder mappings.
     label = businesstype.type.label
+
     # label = "museum_gallery:museum_gallery", so we have to split on first ":".
     traininglabels = typemapping[getLabel(label)]
     generalpath = os.path.join(settings.APP_DATA_TRAINING, "general")
@@ -156,7 +159,7 @@ def parse(inputFile):
 
 
 
-'''
+
 business = parse(os.path.join(settings.APP_DATA_HTML, "escada_com.txt"))
 
 print business.name
@@ -165,16 +168,17 @@ print business.type
 for key, value in business.data.items():
     print "----------------------------------------"
     print key, list(set(value))
-'''
+
 
 def demo():
     generalpath = os.path.join(settings.APP_DATA_TRAINING, "general")
     trainingfolders = []
     for generallabel in listdir(generalpath):
-        if generallabel in ["menu", "location", "noise", "hours"]:
+        if generallabel in ["menu", "location", "noise", "hours","clothing"]:
             trainingfolders.append(os.path.join(generalpath, generallabel))
     nbc = NaiveBayesClassifier(trainingfolders, settings.APP_DATA_COMMON_WORDS)
     nbc.demo()
 
-demo()
+#demo()
+
 
