@@ -66,11 +66,12 @@ class NaiveBayesClassifier:
     """
     def _generateTrainingSet(self):
         ignores = [".DS_Store"]
-        for name, folderpath in self._trainingfolders.items():
-            if folderpath not in ignores:
+        for folderpath in self._trainingfolders:
+            basename = os.path.basename(folderpath)
+            if basename not in ignores:
                 for sublabel in listdir(folderpath):
                     if sublabel not in ignores:
-                        label = str(name) + ":" + str(sublabel)
+                        label = str(basename) + ":" + str(sublabel)
                         self._labels.add(label)
                         sublabelpath = os.path.join(folderpath, sublabel)
                         with open(sublabelpath) as trainingfile:
@@ -237,7 +238,8 @@ class NaiveBayesClassifier:
             "8:00 AM to 9:00 PM",
             "6th street",
             "Mona Lisa",
-             "Margaret Magnetic North: The Landscapes of Tom Uttech Milwaukee: Milwaukee Art Museum"
+            "Margaret Magnetic North: The Landscapes of Tom Uttech Milwaukee: Milwaukee Art Museum",
+            "pizzas"
         }
 
         for item in testingSet:

@@ -33,11 +33,11 @@ Identify the business type of the business JSON data.
 """
 def parseBusinessType(parsedJSON):
     businessespath = os.path.join(settings.APP_DATA_TRAINING, "businesses")
-    businessfolders = {}
+    businessfolders = []
     for businesslabel in listdir(businessespath):
         ignores = [".DS_Store"]
         if businesslabel not in ignores:
-            businessfolders[businesslabel] = os.path.join(businessespath, businesslabel)
+            businessfolders.append(os.path.join(businessespath, businesslabel))
 
     nbc = NaiveBayesClassifier(businessfolders, settings.APP_DATA_COMMON_WORDS)
     # Our data files are .txt files for now.
@@ -140,10 +140,10 @@ def parse(inputFile):
     generalpath = os.path.join(settings.APP_DATA_TRAINING, "general")
 
     # The training folders to be passed into the NBC.
-    trainingfolders = {}
+    trainingfolders = []
     for generallabel in listdir(generalpath):
         if generallabel in traininglabels:
-            trainingfolders[generallabel] = os.path.join(generalpath, generallabel)
+            trainingfolders.append(os.path.join(generalpath, generallabel))
 
     businessData = parseBusinessData(parsedJSON, trainingfolders)
 
@@ -157,6 +157,18 @@ def parse(inputFile):
 business = parse(os.path.join(settings.APP_DATA_HTML, "cpk_com.txt"))
 for menuitem in business.menu:
     print menuitem
+
+def demo():
+    generalpath = os.path.join(settings.APP_DATA_TRAINING, "general")
+    trainingfolders = []
+    for generallabel in listdir(generalpath):
+        if generallabel in ["menu", "location", "noise", "hours"]:
+            trainingfolders.append(os.path.join(generalpath, generallabel))
+    nbc = NaiveBayesClassifier(trainingfolders, settings.APP_DATA_COMMON_WORDS)
+    nbc.demo()
+
+demo()
+
 
 """
 for location in business.locations:
