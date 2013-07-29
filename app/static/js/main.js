@@ -27,9 +27,7 @@ $('.search-button').on('click', function(evt){
             if (data){
                 categoryData = data;
                 setLabels(data.labels);
-                $('#tag-label').html("");
-                $('#tag-content').html("");
-            
+                $('#tag-container').html("");
                 $('.data-name').html(data.name);
                 
                 var probability = data.type.probability * 100;
@@ -39,15 +37,6 @@ $('.search-button').on('click', function(evt){
                 label = label.replace(/_/g, ", ")
 
                 $('.data-business').html(label + ' | ' + probability + '%');
-                
-                // var menuHTML = '';
-                // data.menu.forEach(function(menuItem){
-                //     menuHTML += '<span class="tag"><span>' + menuItem.trim() + '</span></span>';
-                // });
-                // menuHTML += '<input id="menuTags_tag" value="" data-default="" ' +
-                //     'style="color: rgb(102, 102, 102); width: 12px;"></div></div>';
-                // $('#menuTags_tagsinput').html(menuHTML);
-
                 $('.loader').addClass('hide');
                 $('.data-wrap').removeClass('hide');
             }
@@ -55,41 +44,6 @@ $('.search-button').on('click', function(evt){
             evt.currentTarget.disabled = false;
         });
     }
-
-    /*
-    $('.data-header small').html('California Pizza Kitchen');
-    $('#locationTags_tagsinput').html('Loading...');
-    $('.data-name').html('California Pizza Kitchen');
-    
-    $('.data-hours').html('Unknown');
-    */
-    /*
-    $.ajax({
-        url: '/locations',
-    }).done(function(addresses){
-    	var locationsHTML = '';
-    	JSON.parse(addresses).forEach(function(address){
-            locationsHTML += '<span class="tag"><span>' + address.trim() + '</span></span>';
-    	});
-    	locationsHTML += 
-    		'<input id="locationTags_tag" value="" data-default="" ' +
-    		'style="color: rgb(102, 102, 102); width: 12px;"></div></div>';
-    	$('#locationTags_tagsinput').html(locationsHTML);
-    });
-    $.ajax({
-        url: '/menu',
-    }).done(function(menu){
-        var menuHTML = '';
-        JSON.parse(menu).forEach(function(menuItem){
-            menuHTML += '<span class="tag"><span>' + menuItem.trim() + '</span></span>';
-        });
-        menuHTML +=
-    		'<input id="menuTags_tag" value="" data-default="" ' +
-    		'style="color: rgb(102, 102, 102); width: 12px;"></div></div>';
-    	$('#menuTags_tagsinput').html(menuHTML);
-    });
-    
-    */
 });
 
 function setLabels(data){
@@ -105,12 +59,9 @@ function setLabels(data){
         $('.data-categories').append("<li><div class='todo-content todo-name'>" + labels[i] + "</div></li>");    
     }
     
-
     $('.todo li').click(function() {
         $(this).toggleClass('todo-done');
-    });
-
-    $('#submit-button').click(function(){
+    
         var allCategories = $('.data-categories').children('li');
         var clickedCategories = new Array();
 
@@ -119,24 +70,24 @@ function setLabels(data){
                 clickedCategories.push(allCategories[i].textContent);
             }
         }
-
-        $('#tag-label').html("");
-        $('#tag-content').html("");
+        
+        $('#tag-container').html("");
         for(var i = 0; i < clickedCategories.length; i++){
             var categoryContent = categoryData.labels[clickedCategories[i]];
 
-            $('#tag-label').append("<div class='span6 data-item noRightMargin'><span class='label label-large label-primary span3'>" + 
-                clickedCategories[i] + "</span></div>");
+            var outputHTML = "<div class='span6 data-item noRightMargin'><div class='label label-large label-primary span3'>" + 
+                            clickedCategories[i] + "</div>";
 
             var content = "";
             for(var j = 0; j < categoryContent.length; j++){
                 content += "<span class='tag'><span>" +  categoryContent[j] + "</span></span>";
             }
 
-            $('#tag-content').append("<div class='span6 data-item noRightMargin'>" +
+            outputHTML += "<div class='span6 data-item noRightMargin'>" +
                     "<input name='tagsinput' class='tagsinput tagsinput-primary' style='display: none;'>" + 
                     "<div class='tagsinput tagsinput-primary'>" + content + 
-                    "</div></div>");
+                    "</div></div></div>";
+            $('#tag-container').append(outputHTML);
         }
     });
 }
