@@ -169,10 +169,8 @@ def labelToDirsMapping(label):
     if label == "furniture":
         trainingdirs.append("furniture")
         trainingdirs.append("jewellery")
-    if label == "dental":
-        trainingdirs.append("dental")
     if label == "medical":
-        trainingdirs.append("medical")
+        trainingdirs.append("dental")
     if label == "jewellery":
         trainingdirs.append("jewellery")
     if label == "hotel":
@@ -206,7 +204,7 @@ def parsePropertiesMapping(label):
     HOURS_PROB = 0.6; HOURS_MIN = 0; HOURS_MAX = 10
     LOC_PROB = 0.6; LOC_MIN = 4; LOC_MAX = 20; LOC_THRES = 4
     FUR_PROB = 0.6; FUR_MIN = 3; FUR_MAX = 15;
-    DENT_PROB = 0.6; DENT_MIN = 3; DENT_MAX = 25;
+    DENT_PROB = 0.6; DENT_MIN = 3; DENT_MAX = 1200;
     MED_PROB = 0.6; MED_MIN = 3; MED_MAX = 25;
     JEW_PROB = 0.6; JEW_MIN = 3; JEW_MAX = 25;
     HOTEL_PROB = 0.6; HOTEL_MIN = 3; HOTEL_MAX = 10;
@@ -223,10 +221,8 @@ def parsePropertiesMapping(label):
     if label == "furniture":
         properties["furniture"] = createProperties(FUR_PROB, FUR_MIN, FUR_MAX)
         properties["jewellery"] = createProperties(JEW_PROB, JEW_MIN, JEW_MAX)
-    if label == "dental":
-        properties["dental"] = createProperties(DENT_PROB, DENT_MIN, DENT_MAX)
     if label == "medical":
-        properties["medical"] = createProperties(MED_PROB, MED_MIN, MED_MAX)
+        properties["dental"] = createProperties(DENT_PROB, DENT_MIN, DENT_MAX)
     if label == "jewellery":
         properties["jewellery"] = createProperties(JEW_PROB, JEW_MIN, JEW_MAX)
     if label == "hotel":
