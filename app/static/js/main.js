@@ -1,4 +1,3 @@
-
 // on enter while on search
 $("#search").keyup(function(event){
     var enterKey = 13
@@ -7,10 +6,15 @@ $("#search").keyup(function(event){
     }
 });
 
+var categoryData;
+
 $('.search-button').on('click', function(evt){
+    $('.loader').removeClass('hide');
+    $('.data-wrap').addClass('hide');
+
     var searchEl = $("#search");
     var inputURL = searchEl.val();
-    $('.data-wrap').addClass('hide');
+
     // Do some more sanity check to ensure its a valid URL.
     if (inputURL.indexOf('www') != -1){
         searchEl.attr('disabled', true);
@@ -21,17 +25,30 @@ $('.search-button').on('click', function(evt){
         $.get('classify_business', {business_name: JSON.stringify(inputURL)}, function(data){
             data = JSON.parse(data);
             if (data){
+                categoryData = data;
+                setLabels(data.labels);
+                $('#tag-label').html("");
+                $('#tag-content').html("");
+            
                 $('.data-name').html(data.name);
-                $('.data-business').html(data.type.label + ' with ' + data.type.probability + '%');
                 
-                var menuHTML = '';
-                data.menu.forEach(function(menuItem){
-                    menuHTML += '<span class="tag"><span>' + menuItem.trim() + '</span></span>';
-                });
-                menuHTML += '<input id="menuTags_tag" value="" data-default="" ' +
-                    'style="color: rgb(102, 102, 102); width: 12px;"></div></div>';
-                $('#menuTags_tagsinput').html(menuHTML);
+                var probability = data.type.probability * 100;
+                probability = probability.toString().substring(0,5);
 
+                var label = data.type.label;
+                label = label.replace(/_/g, ", ")
+
+                $('.data-business').html(label + ' | ' + probability + '%');
+                
+                // var menuHTML = '';
+                // data.menu.forEach(function(menuItem){
+                //     menuHTML += '<span class="tag"><span>' + menuItem.trim() + '</span></span>';
+                // });
+                // menuHTML += '<input id="menuTags_tag" value="" data-default="" ' +
+                //     'style="color: rgb(102, 102, 102); width: 12px;"></div></div>';
+                // $('#menuTags_tagsinput').html(menuHTML);
+
+                $('.loader').addClass('hide');
                 $('.data-wrap').removeClass('hide');
             }
             searchEl.removeAttr('disabled');
@@ -74,6 +91,56 @@ $('.search-button').on('click', function(evt){
     
     */
 });
+
+function setLabels(data){
+    var labels = new Array();
+    for(var key in data) {
+        if(data.hasOwnProperty(key)) {
+            labels.push(key);
+        }
+    }
+
+    $('.data-categories').html("");
+    for(var i = 0; i < labels.length; i++){
+        $('.data-categories').append("<li><div class='todo-content todo-name'>" + labels[i] + "</div></li>");    
+    }
+    
+
+    $('.todo li').click(function() {
+        $(this).toggleClass('todo-done');
+    });
+
+    $('#submit-button').click(function(){
+        var allCategories = $('.data-categories').children('li');
+        var clickedCategories = new Array();
+
+        for(var i = 0; i < allCategories.length; i++){
+            if(allCategories[i].className === "todo-done"){
+                clickedCategories.push(allCategories[i].textContent);
+            }
+        }
+
+        $('#tag-label').html("");
+        $('#tag-content').html("");
+        for(var i = 0; i < clickedCategories.length; i++){
+            var categoryContent = categoryData.labels[clickedCategories[i]];
+
+            $('#tag-label').append("<div class='span6 data-item noRightMargin'><span class='label label-large label-primary span3'>" + 
+                clickedCategories[i] + "</span></div>");
+
+            var content = "";
+            for(var j = 0; j < categoryContent.length; j++){
+                content += "<span class='tag'><span>" +  categoryContent[j] + "</span></span>";
+            }
+
+            $('#tag-content').append("<div class='span6 data-item noRightMargin'>" +
+                    "<input name='tagsinput' class='tagsinput tagsinput-primary' style='display: none;'>" + 
+                    "<div class='tagsinput tagsinput-primary'>" + content + 
+                    "</div></div>");
+        }
+    });
+}
+
 
 //this is the data that is obtained by making a call to 
 //businesscategories.getCategories()

@@ -141,6 +141,8 @@ def labelToDirsMapping(label):
         trainingdirs.append("clothing")
     if label == "restaurant":
         trainingdirs.append("menu")
+    if label == "furniture":
+        trainingdirs.append("furniture")
     trainingdirs.extend(defaultdirs)
     return trainingdirs
 
@@ -169,6 +171,7 @@ def parsePropertiesMapping(label):
     MENU_PROB = 0.7; MENU_MIN = 0; MENU_MAX = 5
     HOURS_PROB = 0.6; HOURS_MIN = 0; HOURS_MAX = 10
     LOC_PROB = 0.6; LOC_MIN = 4; LOC_MAX = 12; LOC_THRES = 4
+    FUR_PROB = 0.6; FUR_MIN = 3; FUR_MAX = 15;
 
     properties = {}
     # The mapping part. The keys of the properties dict correspond to the folder names under the
@@ -179,6 +182,8 @@ def parsePropertiesMapping(label):
         properties["clothing"] = createProperties(CLO_PROB, CLO_MIN, CLO_MAX)
     if label == "restaurant":
         properties["menu"] = createProperties(MENU_PROB, MENU_MIN, MENU_MAX)
+    if label == "furniture":
+        properties["furniture"] = createProperties(FUR_PROB, FUR_MIN, FUR_MAX)
 
     properties["hours"] = createProperties(HOURS_PROB, HOURS_MIN, HOURS_MAX)
     properties["location"] = createProperties(LOC_PROB, LOC_MIN, LOC_MAX, LOC_THRES)
