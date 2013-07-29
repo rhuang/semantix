@@ -169,6 +169,12 @@ def labelToDirsMapping(label):
         trainingdirs.append("menu")
     if label == "furniture":
         trainingdirs.append("furniture")
+    if label == "dental":
+        trainingdirs.append("dental")
+    if label == "medical":
+        trainingdirs.append("medical")
+    if label == "jewellery":
+        trainingdirs.append("jewellery")
     trainingdirs.extend(defaultdirs)
     return trainingdirs
 
@@ -198,6 +204,9 @@ def parsePropertiesMapping(label):
     HOURS_PROB = 0.6; HOURS_MIN = 0; HOURS_MAX = 10
     LOC_PROB = 0.6; LOC_MIN = 4; LOC_MAX = 20; LOC_THRES = 4
     FUR_PROB = 0.6; FUR_MIN = 3; FUR_MAX = 15;
+    DENT_PROB = 0.6; DENT_MIN = 3; DENT_MAX = 25;
+    MED_PROB = 0.6; MED_MIN = 3; MED_MAX = 25;
+    JEW_PROB = 0.6; JEW_MIN = 3; JEW_MAX = 25;
 
     properties = {}
     # The mapping part. The keys of the properties dict correspond to the folder names under the
@@ -210,6 +219,12 @@ def parsePropertiesMapping(label):
         properties["menu"] = createProperties(MENU_PROB, MENU_MIN, MENU_MAX)
     if label == "furniture":
         properties["furniture"] = createProperties(FUR_PROB, FUR_MIN, FUR_MAX)
+    if label == "dental":
+        properties["dental"] = createProperties(DENT_PROB, DENT_MIN, DENT_MAX)
+    if label == "medical":
+        properties["medical"] = createProperties(MED_PROB, MED_MIN, MED_MAX)
+    if label == "jewellery":
+        properties["jewellery"] = createProperties(JEW_PROB, JEW_MIN, JEW_MAX)
 
     properties["hours"] = createProperties(HOURS_PROB, HOURS_MIN, HOURS_MAX)
     properties["location"] = createProperties(LOC_PROB, LOC_MIN, LOC_MAX, LOC_THRES)
