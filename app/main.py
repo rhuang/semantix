@@ -174,6 +174,8 @@ def labelToDirsMapping(label):
         trainingdirs.append("medical")
     if label == "jewellery":
         trainingdirs.append("jewellery")
+    if label == "hotel":
+        trainingdirs.append("hotel")
     trainingdirs.extend(defaultdirs)
     return trainingdirs
 
@@ -206,6 +208,7 @@ def parsePropertiesMapping(label):
     DENT_PROB = 0.6; DENT_MIN = 3; DENT_MAX = 25;
     MED_PROB = 0.6; MED_MIN = 3; MED_MAX = 25;
     JEW_PROB = 0.6; JEW_MIN = 3; JEW_MAX = 25;
+    HOTEL_PROB = 0.6; HOTEL_MIN = 3; HOTEL_MAX = 10;
 
     properties = {}
     # The mapping part. The keys of the properties dict correspond to the folder names under the
@@ -224,10 +227,11 @@ def parsePropertiesMapping(label):
         properties["medical"] = createProperties(MED_PROB, MED_MIN, MED_MAX)
     if label == "jewellery":
         properties["jewellery"] = createProperties(JEW_PROB, JEW_MIN, JEW_MAX)
+    if label == "hotel":
+        properties["hotel"] = createProperties(HOTEL_PROB, HOTEL_MIN, HOTEL_MAX)
 
     properties["hours"] = createProperties(HOURS_PROB, HOURS_MIN, HOURS_MAX)
-    properties["location"] = createProperties(LOC_PROB, LOC_MIN, LOC_MAX, LOC_THRES)
-    
+    properties["location"] = createProperties(LOC_PROB, LOC_MIN, LOC_MAX, LOC_THRES)    
     return properties
 
 """
