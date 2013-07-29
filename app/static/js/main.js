@@ -39,9 +39,9 @@ $('.search-button').on('click', function(evt){
                 $('.data-business').html(label + ' | ' + probability + '%');
                 $('.loader').addClass('hide');
                 $('.data-wrap').removeClass('hide');
+                evt.currentTarget.disabled = false;
             }
             searchEl.removeAttr('disabled');
-            evt.currentTarget.disabled = false;
         });
     }
 });
@@ -75,18 +75,18 @@ function setLabels(data){
         for(var i = 0; i < clickedCategories.length; i++){
             var categoryContent = categoryData.labels[clickedCategories[i]];
 
-            var outputHTML = "<div class='span6 data-item noRightMargin'><div class='label label-large label-primary span3'>" + 
-                            clickedCategories[i] + "</div>";
+            var outputHTML = '<div class="span6 data-item noRightMargin"><div class="label label-large label-primary span3">' + 
+                            clickedCategories[i] + '</div>';
 
             var content = "";
             for(var j = 0; j < categoryContent.length; j++){
-                content += "<span class='tag'><span>" +  categoryContent[j] + "</span></span>";
+                content += '<span class="tag"><span>' +  categoryContent[j] + '</span></span>';
             }
 
-            outputHTML += "<div class='span6 data-item noRightMargin'>" +
-                    "<input name='tagsinput' class='tagsinput tagsinput-primary' style='display: none;'>" + 
-                    "<div class='tagsinput tagsinput-primary'>" + content + 
-                    "</div></div></div>";
+            outputHTML += '<div class="span6 data-item noRightMargin">' +
+                    '<input name="tagsinput" class="tagsinput tagsinput-primary" style="display: none;">' + 
+                    '<div class="tagsinput tagsinput-primary">" + content + '
+                    '</div></div></div>';
             $('#tag-container').append(outputHTML);
         }
     });
