@@ -124,6 +124,7 @@ def parseLabels(businessData, businesstype):
     extrainfo = {"countries": countries, "states": states, "keywords": keywords}
 
     parseditems = defaultdict(list)
+    uniquesets = defaultdict(set)
     # Get the parsing properties for each label, such as probability threshold.
     properties = parsePropertiesMapping(businesstype.type.label)
     for type, items in businessData.items():
@@ -134,14 +135,20 @@ def parseLabels(businessData, businesstype):
                 for item in items:
                     location = parseLocations(type, extrainfo, item, prop)
                     if location is not None:
-                        parseditems[type.label].append(item)
+                        # Account for cases like "ADDRESS" AND "address" with .lower().
+                        if item.lower() not in uniquesets[type.label]:
+                            parseditems[type.label].append(item)
+                        uniquesets[type.label].add(item.lower())
             elif type.probability >= prop["probability"]:
+                if type.label == "menu":
+                    for item in items:
+                        print item
                 for item in items:
                     if prop["mintokens"] <= len(item.split()) <= prop["maxtokens"]:
-                        parseditems[type.label].append(item)
-    # Get rid of duplicate results.
-    for label, items in parseditems.items():
-        parseditems[label] = list(set(items))
+                        # Account for cases like "ADDRESS" AND "address" with .lower().
+                        if item.lower() not in uniquesets[type.label]:
+                            parseditems[type.label].append(item)
+                        uniquesets[type.label].add(item.lower())
     return parseditems
 
 """
@@ -187,7 +194,7 @@ def parsePropertiesMapping(label):
     # TUNING PARAMETERS.
     ART_PROB = 0.7; ART_MIN = 0; ART_MAX = 10
     CLO_PROB = 0.7; CLO_MIN = 0; CLO_MAX = 15
-    MENU_PROB = 0.7; MENU_MIN = 0; MENU_MAX = 5
+    MENU_PROB = 0.7; MENU_MIN = 0; MENU_MAX = 10
     HOURS_PROB = 0.6; HOURS_MIN = 0; HOURS_MAX = 10
     LOC_PROB = 0.6; LOC_MIN = 4; LOC_MAX = 20; LOC_THRES = 4
     FUR_PROB = 0.6; FUR_MIN = 3; FUR_MAX = 15;
