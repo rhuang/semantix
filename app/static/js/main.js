@@ -85,7 +85,7 @@ function setLabels(data){
 
             outputHTML += '<div class="span6 data-item noRightMargin">' +
                     '<input name="tagsinput" class="tagsinput tagsinput-primary" style="display: none;">' + 
-                    '<div class="tagsinput tagsinput-primary">" + content + '
+                    '<div class="tagsinput tagsinput-primary">' + content +
                     '</div></div></div>';
             $('#tag-container').append(outputHTML);
         }
