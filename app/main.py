@@ -62,14 +62,24 @@ def saveTrainingFileToSet(inputFile):
 Called by parseLabels. Parsing locations is a bit more convoluted for now, so it has its own
 function.
 """
-def parseLocations(extrainfo, item, prop):
+def parseLocations(type, extrainfo, item, prop):
     POSTAL_CODE_LENGTH = 5
+    # Put this inside properties if other labels use it as well.
+    MAX_PROB = 0.96
 
+    # If greater than max probability, than return right away.
+    if type.probability >= MAX_PROB:
+        return item
+
+    ordinals = ['st', 'nd', 'rd', 'th']
+    numOrdinals = 1
     threshold = prop["threshold"]
     tokenized = filter(None, re.split("[ .,-]", item))
-    if prop["mintokens"] <= len(tokenized) <= prop["maxtokens"]:
+
+    if prop["mintokens"] <= len(tokenized) <= prop["maxtokens"] and \
+        type.probability >= prop["probability"]:
         # A dict of thresholds to map points.
-        thresholds = {}
+        thresholds = defaultdict(int)
         for token in tokenized:
             token = token.lower()
             if token in extrainfo["countries"] and "countries" not in thresholds: 
@@ -83,6 +93,14 @@ def parseLocations(extrainfo, item, prop):
                     thresholds["postalcode"] = 1
             if token in extrainfo["keywords"] and "keywords" not in thresholds:
                 thresholds["keywords"] = 1
+            if len(token) > 2:
+                # Check if this word is an ordinal number like '1st' for location feature.
+                if token[-2:] in ordinals and token[:-2].isdigit():
+                    thresholds["ordinals"] += 1
+            if token[0:1] == "#":
+                if "hash" not in thresholds:
+                    thresholds["hash"] += 1
+
         totalValue = 0
         for key, value in thresholds.items():
             totalValue += value
@@ -111,14 +129,15 @@ def parseLabels(businessData, businesstype):
     for type, items in businessData.items():
         if type.label in properties:
             prop = properties[type.label]
-            if type.probability >= prop["probability"]:
+            # Special function for checking locations.
+            if type.label == "location":
                 for item in items:
-                    item = item.strip()
-                    if type.label == "location":
-                        location = parseLocations(extrainfo, item, prop)
-                        if location is not None:
-                            parseditems[type.label].append(item)
-                    elif prop["mintokens"] <= len(item.split()) <= prop["maxtokens"]:
+                    location = parseLocations(type, extrainfo, item, prop)
+                    if location is not None:
+                        parseditems[type.label].append(item)
+            elif type.probability >= prop["probability"]:
+                for item in items:
+                    if prop["mintokens"] <= len(item.split()) <= prop["maxtokens"]:
                         parseditems[type.label].append(item)
     # Get rid of duplicate results.
     for label, items in parseditems.items():
@@ -170,7 +189,7 @@ def parsePropertiesMapping(label):
     CLO_PROB = 0.7; CLO_MIN = 0; CLO_MAX = 15
     MENU_PROB = 0.7; MENU_MIN = 0; MENU_MAX = 5
     HOURS_PROB = 0.6; HOURS_MIN = 0; HOURS_MAX = 10
-    LOC_PROB = 0.6; LOC_MIN = 4; LOC_MAX = 12; LOC_THRES = 4
+    LOC_PROB = 0.6; LOC_MIN = 4; LOC_MAX = 20; LOC_THRES = 4
     FUR_PROB = 0.6; FUR_MIN = 3; FUR_MAX = 15;
 
     properties = {}

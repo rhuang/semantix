@@ -83,16 +83,20 @@ class NaiveBayesClassifier:
             if word not in self._commonwords:
                 """
                 LOCATION FEATURES SPECIFIC.
+                This needs to be implemented as a strategy somehow so that parse locations filter can use it too.
                 """
                 # Consider all numbers as one category for location. 10 because full address is
                 # about 10 tokens.
-                if word.isdigit() and len(words) < 10:
-                    word = 'number'
+                if len(word) == 5:
+                    word = "postalcode"
                 elif len(word) > 2:
                     # Check if this word is an ordinal number like '1st' for location feature.
                     if word[-2:] in ordinals and word[:-2].isdigit():
                         word = 'ordinal' + str(numOrdinals)
                         numOrdinals += 1
+                elif word.isdigit() and len(words) < 10:
+                    word = 'number'
+
                 """
                 /LOCATION FEATURES SPECIFIC.
                 """
@@ -287,7 +291,9 @@ class NaiveBayesClassifier:
             "pizzas",
             "JEANS",
             "denim jeans",
-            "18601 Airport Way # 135 Santa Ana, CA 92707 949-252-6125"
+            "18601 Airport Way # 135 Santa Ana, CA 92707 949-252-6125",
+            "180 El Camino Real Palo Alto, CA 94304 (650) 325-2753",
+            "201 No 1 Long 507 Fu Xing (Mid) Rd Lu Wan District Shanghai, China 2000"
         }
 
         for item in testingSet:
