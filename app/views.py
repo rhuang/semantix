@@ -54,7 +54,7 @@ def classify_business():
                         "label": business.type.label, 
                         "probability": business.type.probability
                     },
-                    "menu": business.menu
+                    "labels": business.labels
                 })
     return json.dumps(None)
 
