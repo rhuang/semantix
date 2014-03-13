@@ -57,7 +57,7 @@ def parseData(inputFilePath, fileName):
     
     # If the file does exist open it    
     with open(inputFilePath) as data:
-        print "Not using the crawler ##############################"
+        print "JSON crawled data found ##############################"
         souptuple = populateSoupData(soups, data, businessName)    
 
     businessName = souptuple.name

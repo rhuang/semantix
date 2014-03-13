@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import json
 import re
 
+import time
+
 '''
 This function opens a network object denoted by a URL and vists links 
 within associated html. Any links identified will only further be explored
@@ -38,7 +40,7 @@ def pullJsonEncodedHtml(url):
 		url = "http://" + url
 
 	urls = [url]
-	visited = [url]
+	visited = set([url])
 	jsonData = []
 	current_level = 0
 
@@ -46,7 +48,11 @@ def pullJsonEncodedHtml(url):
 	urlEncodingsRegex = '%([0-9]|[A-Z])([0-9]|[A-Z])'
 	doubleStarRegex = '\*\*'
 
-	while len(urls) > 0:
+	start_time = time.time()
+
+	MAX_CRAWLING_TIME = 300 # seconds
+
+	while ((time.time() - start_time) < MAX_CRAWLING_TIME) and len(urls) > 0:
 		htmlText = ""
 		
 		try:
@@ -59,6 +65,7 @@ def pullJsonEncodedHtml(url):
 			htmlText = re.sub(urlEncodingsRegex, ' ', htmlText)
 			htmlText = re.sub(doubleStarRegex, '', htmlText)
 			htmlText = unicode(htmlText, errors='ignore')
+			print "Crawled URL : " + str(urls[0])
 			jsonData.append({
 				"body" : htmlText,
 				"sequence_number" : current_level,
@@ -69,14 +76,18 @@ def pullJsonEncodedHtml(url):
 		current_level = current_level + 1
 		htmlSoup = BeautifulSoup(htmlText)
 
-		for tag in htmlSoup.findAll('a', href=True):
-			tag['href'] = urlparse.urljoin(url, tag['href'])
-			if url in tag['href'] and tag['href'] not in visited:
-				urls.append(tag['href'])
-				visited.append(tag['href'])
+		if (time.time() - start_time) < MAX_CRAWLING_TIME:
+			for tag in htmlSoup.findAll('a', href=True):
+				tag['href'] = urlparse.urljoin(url, tag['href'])
+				if url in tag['href'] and tag['href'] not in visited:
+					urls.append(tag['href'])
+					visited.add(tag['href'])
+		else:
+			print "Passed timer, finishing up"
 
 	jsonStrData = ''
 	for data in jsonData:
 		jsonStrData = jsonStrData + json.dumps(data) + '\n'
 	
+	print "Completed Crawling"
 	return jsonStrData
