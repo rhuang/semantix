@@ -6,24 +6,28 @@ import os, errno
 import os.path
 import collections
 import crawler
+import sys
 from collections import  namedtuple
 
 def populateSoupData(soups, data, businessName):
     
-
     souptuple = namedtuple("SoupData", ["name", "soups"])
     for line in data:
-        loadedJson = json.loads(line)
-        seqVal = loadedJson["sequence_number"]  
-        body = loadedJson["body"]
-        
-        decodedQP = quopri.decodestring(body)
-        soup = BeautifulSoup(decodedQP)
+        try:     
+            loadedJson = json.loads(line)
+            seqVal = loadedJson["sequence_number"]  
+            body = loadedJson["body"]
+            
+            decodedQP = quopri.decodestring(body)
+            soup = BeautifulSoup(decodedQP)
 
-        # get the title of the page from the body of the root page
-        if seqVal == 0:
-            businessName = str(soup.title).replace("<title>","").replace("</title>","")
-        soups.append(soup)
+            # get the title of the page from the body of the root page
+            if seqVal == 0:
+                businessName = str(soup.title).replace("<title>","").replace("</title>","")
+            soups.append(soup)
+        except :
+            print "An error occured when populating soup data "
+            #print "on line " + line
 
     souptuple.name = businessName
     souptuple.soups = soups
