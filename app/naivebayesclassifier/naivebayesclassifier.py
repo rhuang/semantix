@@ -83,7 +83,7 @@ class NaiveBayesClassifier:
             if word not in self._commonwords:
 
                 """
-                LOCATION FEATURES SPECIFIC.
+                Location Features Specific
                 This needs to be implemented as a strategy somehow so that parse locations filter can use it too.
                 """
                 # Consider all numbers as one category for location. 10 because full address is
@@ -99,8 +99,9 @@ class NaiveBayesClassifier:
                     word = 'number'
 
                 """
-                /LOCATION FEATURES SPECIFIC.
+                /end Location Features Specific
                 """
+
                 splits[word] = True
 
         return splits
@@ -123,6 +124,8 @@ class NaiveBayesClassifier:
                 # Loop through all labels associated with this feature.
                 for label in labels:
                     featuresset[text][label] += 1
+
+        #print "feature set is " + str(featuresset)
         self._featuresset = featuresset
 
     """
@@ -153,13 +156,16 @@ class NaiveBayesClassifier:
     """
     def classify(self, input): 
         input = input.lower()
-        inputFeatureSet = self._tokenizeInputToFeatures(input)
 
-        #print "Input feature set is " + str(inputFeatureSet)
-        #print "Feature set is" + str(self._featuresset)
+        #print input
+        #if "hysterosalpingogram" in input:
+        #    print "IN NBC for " + input 
+            #print "Labels are " + str(self._labels)
+
         classifiedDataTuple = namedtuple('ClassifiedData', ['label', 'probability'])
 
-        probabilityDistribution = self._prob_classify(inputFeatureSet)
+        # passing entire input into prob classify
+        probabilityDistribution = self._prob_classify(input)
 
         probabilityMap = self.generalizeAndNormalize(probabilityDistribution)
 
@@ -180,15 +186,19 @@ class NaiveBayesClassifier:
     Overwrites _prob_classify of nltk so that we can force label frequencies to be empty, otherwise
     label frequencies will skew our results in favor of which label has the most trained data.
     """
-    def _prob_classify(self, featureset):
-        featureset = featureset.copy() 
-        for fname in featureset.keys(): 
+    def _prob_classify(self, input):
+
+        # Make a featureset of the input after tokenizing tokenized
+        input_tokenized_featureset = self._tokenizeInputToFeatures(input).copy()
+
+        # Ensuring that all the feature names are valid and can be ued
+        for input_feature_name in input_tokenized_featureset.keys(): 
             for label in self._labels: 
-                if (label, fname) in self._featureProbabilityDistribution: 
+                if (label, input_feature_name) in self._featureProbabilityDistribution: 
                     break 
             else: 
-                #print 'Ignoring unseen feature %s' % fname 
-                del featureset[fname] 
+                #print 'Ignoring unseen feature %s' % input_feature_name 
+                del input_tokenized_featureset[input_feature_name] 
 
         # Start with a log probability of 0 to avoid skewing towards larger data sets
         logprob = {} 
@@ -197,19 +207,23 @@ class NaiveBayesClassifier:
             logprob[label] = 0                 
 
         # Add in the log probability of features given labels. 
-
+        # Iterate through the labels assigned eg : location,time, noise
         for label in self._labels: 
-            for (fname, fval) in featureset.items(): 
+
+            # Iterate through the input feature set one by one eg "{turkey:true, bacon:true}"
+            for (input_feature_name, input_feature_val) in input_tokenized_featureset.items(): 
                 
-                if (label, fname) in self._featureProbabilityDistribution: 
-                    feature_probs = self._featureProbabilityDistribution[label,fname] 
-                    #print "log prob for " + str(label) + " for string " + str(fname)+  " is " + str(feature_probs.logprob(fval) )
-                    logprob[label] += feature_probs.logprob(fval) 
+                # If the combination ie (location,turkey) belongs in the trainig set, add the log probability
+                if (label, input_feature_name) in self._featureProbabilityDistribution: 
+                        # Assign its probability
+                        feature_probs = self._featureProbabilityDistribution[label,input_feature_name] 
+                        logprob[label] += feature_probs.logprob(input_feature_val) 
                 else: 
-                # nb: This case will never come up if the classifier was created by 
-                # NaiveBayesClassifier.train(). 
-                    logprob[label] += sum_logs([]) # = -INF.
+                        # nb: This case will never come up if the classifier was created by 
+                        # NaiveBayesClassifier.train(). 
+                        logprob[label] += sum_logs([]) # = -INF.
         
+
         # print out the log prob for each label before normalizing
         #for key,value in  self._featureProbabilityDistribution.items():
         #    print "key value of featureProbabilityDistribution " + str(key) + "," + str(value.freqdist() )
@@ -317,7 +331,7 @@ class NaiveBayesClassifier:
             print "-------------------------------------------------------"
 
             item = item.lower()
-            featureset = self._tokenizeInputToFeatures(item)
+            featureset = self._tokenizeInputToFeatures(item, True)
 
             print featureset
             probabilityDistribution = self._prob_classify(featureset)

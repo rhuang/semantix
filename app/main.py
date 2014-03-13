@@ -172,7 +172,8 @@ def labelToDirsMapping(label):
         trainingdirs.append("furniture")
         trainingdirs.append("jewellery")
     if label == "medical":
-        trainingdirs.append("dental") # there is no medical folder for now
+        trainingdirs.append("dental")
+        trainingdirs.append("medicine")
     if label == "jewellery":
         trainingdirs.append("jewellery")
     if label == "hotel":
@@ -204,8 +205,9 @@ def parsePropertiesMapping(label):
     CLO_PROB = 0.7; CLO_MIN = 0; CLO_MAX = 15
     MENU_PROB = 0.7; MENU_MIN = 0; MENU_MAX = 10
     HOURS_PROB = 0.6; HOURS_MIN = 0; HOURS_MAX = 10
-    # Location threshold kept to 3 since at times just the street is mentioned (eg )
-    LOC_PROB = 0.6; LOC_MIN = 4; LOC_MAX = 20; LOC_THRES = 3
+    # Location threshold kept to 3 since at times just the street is mentioned
+    # Location max kept to 35 for some locations that are all squished together
+    LOC_PROB = 0.6; LOC_MIN = 4; LOC_MAX = 35; LOC_THRES = 3
     # furniture kept to 0.4 probability since any furniture classifications will include the labels
     # hours, noise, location, jewelery, and furniture and the minimum probability goes lower
     FUR_PROB = 0.4; FUR_MIN = 1; FUR_MAX = 15;
@@ -213,6 +215,7 @@ def parsePropertiesMapping(label):
     MED_PROB = 0.6; MED_MIN = 3; MED_MAX = 25;
     JEW_PROB = 0.6; JEW_MIN = 3; JEW_MAX = 25;
     HOTEL_PROB = 0.6; HOTEL_MIN = 3; HOTEL_MAX = 10;
+    MEDICINE_PROB = 0.6; MEDICINE_MIN = 3; MEDICINE_MAX = 10;
 
     properties = {}
     # The mapping part. The keys of the properties dict correspond to the folder names under the
@@ -228,6 +231,7 @@ def parsePropertiesMapping(label):
         properties["jewellery"] = createProperties(JEW_PROB, JEW_MIN, JEW_MAX)
     if label == "medical":
         properties["dental"] = createProperties(DENT_PROB, DENT_MIN, DENT_MAX)
+        properties["medicine"] = createProperties(MEDICINE_PROB, MEDICINE_MIN, MEDICINE_MAX)
     if label == "jewellery":
         properties["jewellery"] = createProperties(JEW_PROB, JEW_MIN, JEW_MAX)
     if label == "hotel":

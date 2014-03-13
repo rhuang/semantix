@@ -25,12 +25,14 @@ def parseSingleSoup(soup, contextMap, nbc):
                 # Clean up the string.
                 finalText = ' '.join(finalText.split())
 
-                #print "Classifying " + finalText 
+                #if "Anne Arnold" in finalText:
+                #    print "Classifying " + finalText 
 
                 # Classify the string.
                 data = nbc.classify(finalText)
 
-                #print "Classified " + str(data)
+                #if "Anne Arnold" in finalText:
+                #    print "Classified " + str(data)
                 # Add into dict.
                 if data in contextMap:
                     contextMap[data].append(finalText)

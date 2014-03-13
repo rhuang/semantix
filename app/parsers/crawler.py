@@ -55,8 +55,8 @@ def pullJsonEncodedHtml(url):
 			print "ERROR: crawler.pullJsonEncodedHtml cannot open url argument " + urls[0]
 
 		if htmlText is not "":
-			htmlText = re.sub(whiteSpace, ' ', htmlText)
-			htmlText = re.sub(urlEncodings, ' ', htmlText)
+			htmlText = re.sub(whiteSpaceRegex, ' ', htmlText)
+			htmlText = re.sub(urlEncodingsRegex, ' ', htmlText)
 			htmlText = re.sub(doubleStarRegex, '', htmlText)
 			htmlText = unicode(htmlText, errors='ignore')
 			jsonData.append({
