@@ -7,9 +7,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import settings
 from parsers import jsonparser as JsonParser
 from parsers import contextparser as ContextParser
-from parsers import businesstypeparser as BusinessTypeParser
 from naivebayesclassifier.naivebayesclassifier import NaiveBayesClassifier
 import re
+import time
 
 WINDOWS = "nt"
 reload(sys)
@@ -27,24 +27,7 @@ def parseBusinessData(parsedJSON, trainingfolders):
     # NOTE: contextMap may have repeats of similar texts, it needs to run through string comparison
     # taking bests.
 
-"""
-Identify the business type of the business JSON data.
-@return ("Business", ["name", "type"])
-"""
-def parseBusinessType(parsedJSON):
-    businessespath = os.path.join(settings.APP_DATA_TRAINING, "businesses")
-    businessfolders = []
-    for businesslabel in listdir(businessespath):
-        ignores = [".DS_Store"]
-        if businesslabel not in ignores:
-            businessfolders.append(os.path.join(businessespath, businesslabel))
 
-    nbc = NaiveBayesClassifier(businessfolders, settings.APP_DATA_COMMON_WORDS)
-    # Our data files are .txt files for now.
-    businesstuple = namedtuple("Business", ["name", "type"])
-    businesstuple.name = parsedJSON.name
-    businesstuple.type = BusinessTypeParser.parse(parsedJSON.soups, nbc)
-    return businesstuple
 
 """
 Saves a training file to a set to use as a keyword match when parsing.
@@ -247,11 +230,15 @@ Takes in an input path and returns a namedtuple.
     {"location": [...], "clothing": [...], ... }
 """
 def parse(inputFilePath, fileName):
+
+    start_time = time.time()
+    print inputFilePath
+    print fileName
     parsedJSON = JsonParser.parseData(inputFilePath, fileName)
-    businesstype = parseBusinessType(parsedJSON)
-    
+
     # Obtain the correct general training folder mappings.
-    label = businesstype.type.label
+    label = parsedJSON.type.label
+    print label
     trainingdirs = labelToDirsMapping(label)
     generalpath = os.path.join(settings.APP_DATA_TRAINING, "general")
 
@@ -261,11 +248,11 @@ def parse(inputFilePath, fileName):
         trainingpaths.append(os.path.join(generalpath, dir))
 
     businessData = parseBusinessData(parsedJSON, trainingpaths)
+    labels = parseLabels(businessData, parsedJSON)
 
-    labels = parseLabels(businessData, businesstype)
-
+    print "Total time approximatately " + str((time.time() - start_time))  + " seconds"
     Business = namedtuple("Business", ["name", "type", "data", "labels"])
-    return Business(businesstype.name, businesstype.type, businessData, labels)
+    return Business(parsedJSON.name, parsedJSON.type, businessData, labels)
 
 """
 business = parse(os.path.join(settings.APP_DATA_HTML, "escada_com.txt"))

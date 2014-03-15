@@ -1,12 +1,18 @@
 import re
+import time
+
+MAX_CONTEXT_PARSING_TIME = 30 # seconds
+
+# The most common script tags
+scriptTags = re.compile(r"[{}\[\]\*>=]")
 
 # Input         -   soup        : A soup that 
-#                   contextMap  : A map that contains all classification types as keys, with their respective values as a list of text 
+#                   contextMap  : 
 # Description   -   Iterates through the single soup looking for text and calling the classifier, classifying the text into the map
 
 def parseSingleSoup(soup, contextMap, nbc):
     textList = []
-    scriptTags = re.compile(r"[{}\[\]\*>=]")
+    # A map that contains all classification types as keys, with their respective values as a list of text 
     if soup is not None:
         tags = soup.findAll()
 
@@ -25,20 +31,14 @@ def parseSingleSoup(soup, contextMap, nbc):
                 # Clean up the string.
                 finalText = ' '.join(finalText.split())
 
-                #if "Anne Arnold" in finalText:
-                #    print "Classifying " + finalText 
-
                 # Classify the string.
                 data = nbc.classify(finalText)
 
-                #if "Anne Arnold" in finalText:
-                #    print "Classified " + str(data)
-                # Add into dict.
+                # Push the classified text into the context Map
                 if data in contextMap:
                     contextMap[data].append(finalText)
                 else:
                     contextMap[data] = [finalText]
-
 
 # Input         - soups     : A list of soups that Beautiful soup is capable of parsing
 #               - nbc       : A trained naive bayes classifier
@@ -48,11 +48,16 @@ def parseSingleSoup(soup, contextMap, nbc):
 def parseSoups(soups, nbc):
     
     contextMap = {}
+    start_time = time.time()
+
     for soup in soups:
-        parseSingleSoup(soup, contextMap, nbc)
 
-    #for key,value in contextMap.items():
-    #    print key
-    #    print value
+        # stop parsing at MAX_JSON_PARSING_TIME
+        if (time.time() - start_time) > MAX_CONTEXT_PARSING_TIME:
+            print "Passed context parser timer, finishing up"
+            break
 
+        parseSingleSoup(soup, contextMap, nbc)        
+
+    print "Classification took " + str((time.time() - start_time))  + " seconds"
     return contextMap
