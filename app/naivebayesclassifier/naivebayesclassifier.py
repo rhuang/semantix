@@ -2,7 +2,7 @@ import os, sys, re
 from nltk.probability import ELEProbDist, FreqDist, DictionaryProbDist, sum_logs, _NINF
 from collections import defaultdict, namedtuple
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile
 
 """
 Example:
@@ -157,11 +157,6 @@ class NaiveBayesClassifier:
     def classify(self, input): 
         input = input.lower()
 
-        #print input
-        #if "hysterosalpingogram" in input:
-        #    print "IN NBC for " + input 
-            #print "Labels are " + str(self._labels)
-
         classifiedDataTuple = namedtuple('ClassifiedData', ['label', 'probability'])
 
         # passing entire input into prob classify
@@ -172,10 +167,7 @@ class NaiveBayesClassifier:
         highestProbabilityLabel = ""
         probability = 0
 
-        #print "for Input " + str(input)
         for key,value in probabilityMap.items():
-        #    print "key : " + str(key)
-        #    print "value : " + str(value)
             if value > probability:
                 probability = value
                 highestProbabilityLabel = key
@@ -223,20 +215,8 @@ class NaiveBayesClassifier:
                         # NaiveBayesClassifier.train(). 
                         logprob[label] += sum_logs([]) # = -INF.
         
-
-        # print out the log prob for each label before normalizing
-        #for key,value in  self._featureProbabilityDistribution.items():
-        #    print "key value of featureProbabilityDistribution " + str(key) + "," + str(value.freqdist() )
-
-        #print "log prob with features is " + str(logprob)    
         dictprobDist = DictionaryProbDist(logprob, normalize=True, log=True)
-
-        ## print out the probability for each label
-        #for label in dictprobDist.samples():
-        #    print label + " is probability " + str(dictprobDist.prob(label))
-
         return dictprobDist
-
 
     # gets art from art:artists
     def getLabel(self, label):
@@ -261,8 +241,7 @@ class NaiveBayesClassifier:
                 probabilityValuesList = probabilityListMap[generalLabel]   
             probabilityValuesList.append(probabilityDistribution.prob(label))
             probabilityListMap[generalLabel] = probabilityValuesList
-        #print probabilityListMap
-        
+
         # makes probability map where the probability for a category is the "max" in the list + the average of the rest of the values
         probabilityMap = {}
         sumOfAllValues = 0
@@ -279,9 +258,6 @@ class NaiveBayesClassifier:
         # now normalize these so all values make sense on a scale to 1
         for key,value in probabilityMap.items():
             probabilityMap[key] = probabilityMap[key] / sumOfAllValues
-        
-        #for key,value in probabilityMap.items():
-        #    print str(key) + "," + str(value)
     
         return probabilityMap
 

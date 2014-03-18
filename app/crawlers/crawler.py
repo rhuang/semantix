@@ -34,7 +34,7 @@ does not make any attempt to validate the url argument.
 '''
 def pullJsonEncodedHtml(url):
 	if not isinstance(url, str):
-		print "ERROR: crawler.pullJsonEncodedHtml called with non-string argument"
+		print "WARNING: crawler.pullJsonEncodedHtml called with non-string argument"
 	
 	if "http://" not in url:
 		url = "http://" + url
@@ -78,7 +78,7 @@ def pullJsonEncodedHtml(url):
 
 		if (time.time() - start_time) < MAX_CRAWLING_TIME:
 			for tag in htmlSoup.findAll('a', href=True):
-				tag['href'] = urlparse.urljoin(url, tag['href'])
+				tag['href'] = urlparse.urljoin(url, tag['href']).split("#")[0]
 				if url in tag['href'] and tag['href'] not in visited:
 					urls.append(tag['href'])
 					visited.add(tag['href'])

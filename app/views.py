@@ -38,18 +38,16 @@ def trainer():
 @app.route("/classify_business", methods=["GET"])
 def classify_business():
     businessesDirectory = settings.APP_DATA_HTML
-    businessName = json.loads(request.args["business_name"]).lower() 
-    
+    url = json.loads(request.args["business_name"]).lower() 
+
     for root, dirs, files in os.walk(businessesDirectory):
         for filename in files:
             originalFileName = filename = filename.lower()           
             if(filename.endswith(".txt")):
                 filename = filename[:-4]
-            if filename == businessName:
-                business = main.parse(
-                    os.path.join(settings.APP_DATA_HTML, originalFileName),
-                    filename
-                )
+            if filename == url:
+
+                business = main.parse(url)
 
                 return json.dumps({
                     "name": business.name,
@@ -61,11 +59,7 @@ def classify_business():
                 })
 
     # Here we know that no match has been found so crawl the website
-    print businessName
-    business = main.parse(
-        os.path.join(settings.APP_DATA_HTML, businessName),
-        businessName
-    )
+    business = main.parse(url)
 
     return json.dumps({
         "name": business.name,

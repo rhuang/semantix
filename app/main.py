@@ -161,6 +161,13 @@ def labelToDirsMapping(label):
         trainingdirs.append("jewellery")
     if label == "hotel":
         trainingdirs.append("hotel")
+    if label == "electronics_computers_phones":
+        trainingdirs.append("electronics")
+        trainingdirs.append("computers")
+    if label == "pets":
+        trainingdirs.append("animals")
+    if label == "liquor":
+        trainingdirs.append("liquor")
     trainingdirs.extend(defaultdirs)
     return trainingdirs
 
@@ -199,6 +206,10 @@ def parsePropertiesMapping(label):
     JEW_PROB = 0.6; JEW_MIN = 3; JEW_MAX = 25;
     HOTEL_PROB = 0.6; HOTEL_MIN = 3; HOTEL_MAX = 10;
     MEDICINE_PROB = 0.6; MEDICINE_MIN = 3; MEDICINE_MAX = 10;
+    ELECTRONICS_PROB = 0.6; ELECTRONICS_MIN = 3; ELECTRONICS_MAX = 10;
+    COMPUTERS_PROB = 0.6; COMPUTERS_MIN = 3; COMPUTERS_MAX = 10;
+    PETS_PROB = 0.3; PETS_MIN = 2; PETS_MAX = 20;
+    LIQUOR_PROB = 0.6;  LIQUOR_MIN = 3; LIQUOR_MAX = 10;
 
     properties = {}
     # The mapping part. The keys of the properties dict correspond to the folder names under the
@@ -219,22 +230,28 @@ def parsePropertiesMapping(label):
         properties["jewellery"] = createProperties(JEW_PROB, JEW_MIN, JEW_MAX)
     if label == "hotel":
         properties["hotel"] = createProperties(HOTEL_PROB, HOTEL_MIN, HOTEL_MAX)
+    if label == "electronics_computers_phones":
+        properties["electronics"] = createProperties(ELECTRONICS_PROB, ELECTRONICS_MIN, ELECTRONICS_MAX)
+        properties["computers"] = createProperties(COMPUTERS_PROB, COMPUTERS_MIN, COMPUTERS_MAX)
+    if label == "pets":
+        properties["pets"] = createProperties(PETS_PROB, PETS_MIN, PETS_MAX)
+    if label == "liquor":
+        properties["pliquorets"] = createProperties(LIQUOR_PROB, LIQUOR_MIN, LIQUOR_MAX)
 
     properties["hours"] = createProperties(HOURS_PROB, HOURS_MIN, HOURS_MAX)
     properties["location"] = createProperties(LOC_PROB, LOC_MIN, LOC_MAX, LOC_THRES)    
     return properties
 
 """
-Takes in an input path and returns a namedtuple.
+Takes in an URL and returns a namedtuple.
 "labels" contain all the information:
     {"location": [...], "clothing": [...], ... }
 """
-def parse(inputFilePath, fileName):
+def parse(url):
 
     start_time = time.time()
-    print inputFilePath
-    print fileName
-    parsedJSON = JsonParser.parseData(inputFilePath, fileName)
+    print url
+    parsedJSON = JsonParser.parseData(url)
 
     # Obtain the correct general training folder mappings.
     label = parsedJSON.type.label
