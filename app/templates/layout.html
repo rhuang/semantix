@@ -1,92 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Semantix</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <meta charset="utf-8">
+  <title>Semantix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- Loading Bootstrap -->
-        <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-        <link href="static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+  <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link href="static/css/flat-ui.css" rel="stylesheet">
+  <link href="static/css/styles.css" rel="stylesheet">
+  <link rel="shortcut icon" href="static/images/semantix_icon.bmp">
+</head>
 
-        <!-- Loading Flat UI -->
-        <link href="static/css/flat-ui.css" rel="stylesheet">
+<body>
+<div class="container-fluid">
 
-        <!-- Loading custom styles -->
-        <link href="static/css/styles.css" rel="stylesheet">
 
-        <link rel="shortcut icon" href="static/images/semantix_icon.bmp">
+  <div class="row-fluid">
+    {% block content %}{% endblock %}
+  </div>
 
-        <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
-        <!--[if lt IE 9]>
-          <script src="js/html5shiv.js"></script>
-        <![endif]-->
-    </head>
-    <body>
-        <div class="navbar navigation">
-            <div class="navbar-inner">
-                <div class="container">
-                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target="#nav-collapse-02">
-                    </button>
-                    <a href="/" class="brand">Semantix</a>
-                    <div class="nav-collapse in collapse" id="nav-collapse-02" style="height: auto;">
-                        <ul class="nav">
-                            <li>
-                                <a href="#">About</a>
-                            </li>
-                            <li>
-                                <a href="#">Contact</a>
-                            </li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
-                </div>
-            </div>
-        </div>
+  <!--<div class="bottom-menu">-->
+    <!--<div class="container">-->
+      <!--<div class="row">-->
+        <!--<div class="col-md-2 navbar-brand">-->
+          <!--<a href="#fakelink">Semantix</a>-->
+        <!--</div>-->
 
-        <div class="container-wrap">
-            <div class="container">
-                {% block content %}{% endblock %}
-            </div>
-        </div>
+        <!--<div class="col-md-8">-->
+          <!--<ul class="bottom-links">-->
+            <!--<li><a href="#fakelink">About Us</a></li>-->
+            <!--<li><a href="#fakelink">Privacy</a></li>-->
+            <!--<li><a href="#fakelink">Terms</a></li>-->
+            <!--<li><a href="#fakelink">Follow Us</a></li>-->
+            <!--<li><a href="#fakelink">Support</a></li>-->
+            <!--<li><a href="#fakelink">Links</a></li>-->
+          <!--</ul>-->
+        <!--</div>-->
 
-        <div class="footer bottom-menu bottom-menu-large mbl">
-            <div class="container">
-                <div class="row">
-                    <div class="span2 brand">
-                        <a href="#" class="">Semantix</a>
-                    </div>
+        <!--<div class="col-md-2">-->
+          <!--<ul class="bottom-icons">-->
+            <!--<li><a href="#fakelink" class="fui-facebook"></a></li>-->
+            <!--<li><a href="#fakelink" class="fui-twitter"></a></li>-->
+          <!--</ul>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
 
-                    <div class="span2">
-                        <h5 class="title">Mainframe</h5>
-                        <ul class="bottom-links">
-                            <li><a href="#">Contacts</a></li>
-                            <li><a href="#">Privacy</a></li>
-                            <li><a href="#">Terms of Use</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="span2">
-                        <h5 class="title">Follow Us</h5>
-                        <ul class="bottom-links">
-                            <li><a target="_blank" href="https://www.facebook.com/semantixbizcrawl">Facebook</a></li>
-                            <li><a href="#">Twitter</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script src="static/js/assets/jquery-1.8.3.min.js"></script>
-        <script src="static/js/assets/jquery-ui-1.10.3.custom.js"></script>
-        <script src="static/js/assets/jquery.ui.touch-punch.min.js"></script>
-        <script src="static/js/assets/bootstrap.min.js"></script>
-        <script src="static/js/assets/bootstrap-select.js"></script>
-        <script src="static/js/assets/bootstrap-switch.js"></script>
-        <script src="static/js/assets/flatui-checkbox.js"></script>
-        <script src="static/js/assets/flatui-radio.js"></script>
-        <script src="static/js/assets/jquery.tagsinput.js"></script>
-        <script src="static/js/assets/jquery.placeholder.js"></script>
-        <script src="static/js/assets/jquery.stacktable.js"></script>
-        <script src="static/js/main.js"></script>
-    </body>
+<!-- Load JS here for greater good -->
+<script src="static/js/assets/jquery-1.8.3.min.js"></script>
+<script src="static/js/assets/jquery-ui-1.10.3.custom.js"></script>
+<script src="static/js/assets/jquery.ui.touch-punch.min.js"></script>
+<script src="static/js/assets/bootstrap.min.js"></script>
+<script src="static/js/assets/bootstrap-select.js"></script>
+<script src="static/js/assets/bootstrap-switch.js"></script>
+<script src="static/js/assets/flatui-checkbox.js"></script>
+<script src="static/js/assets/flatui-radio.js"></script>
+<script src="static/js/assets/jquery.tagsinput.js"></script>
+<script src="static/js/assets/jquery.placeholder.js"></script>
+<script src="static/js/assets/jquery.stacktable.js"></script>
+<script src="static/js/main.js"></script>
+</body>
 </html>

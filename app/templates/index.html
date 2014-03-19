@@ -1,47 +1,136 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="row">
-        <div class="span6 offset3">
-            <div class="control-group huge center">
-                <div class="input-append search-wrap">
-                    <input class="span2" id="search" type="text" placeholder="Search a URL here">
-                    <button class="btn btn-huge search-button" type="button">
-                        <span class="fui-search"></span>
-                    </button>
-                </div>
-                <div class="loader hide">
-                    <img src="../static/images/icons/Loader.gif">
-                </div>
-            </div>
-        </div>
+<div class="col-md-9 left-page-content">
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-items">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Semantix</a>
+      </div>
+      <div class="collapse navbar-collapse pull-right" id="nav-items">
+        <ul class="nav navbar-nav">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="row">
-        <div class="span12 data-wrap hide">
-            <div class="page-header data-header">
-                <h1></h1>
-            </div>
-            <div class="row">
-                <div class="span12 data-item">
-                    <span class="label label-large label-primary span3">Name</span>
-                    <p class="data data-name"></p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="span9 data-item">
-                    <span class="label label-large label-primary span3">Business Type</span>
-                    <p class="data data-business"></p>
-                </div>
-            </div>
+  </nav>
+  <div class="top-search-spacing"></div>
+  <div class="search-heading text-center"> Enter URL for Site </div>
+  <div class="url-search-bar">
+    <div class="form-group">
+      <div class="input-group input-group-hg">
+        <input class="form-control" type="search" id="search">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" id="search-button"><span class="fui-search"></span></button>
+        </span>
+      </div>
+    </div>
+    <div class="text-danger text-center hide" id="search-url-error">Please enter a valid URL</div>
+  </div>
 
-            <div class="row margin-zero">
-                <div class="todo mrm span4">
-                    <div class="todo-search categories-header">
-                        Categories
-                    </div>
-                    <ul class="data-categories"></ul>
-                </div>
-            </div>
-            <div class="row" id="tag-container"></div>
-        </div>
+  <div class="spinner hide" id="spinner">
+    <div class="spinner-container container1">
+      <div class="circle1"></div>
+      <div class="circle2"></div>
+      <div class="circle3"></div>
+      <div class="circle4"></div>
     </div>
+    <div class="spinner-container container2">
+      <div class="circle1"></div>
+      <div class="circle2"></div>
+      <div class="circle3"></div>
+      <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container3">
+      <div class="circle1"></div>
+      <div class="circle2"></div>
+      <div class="circle3"></div>
+      <div class="circle4"></div>
+    </div>
+  </div>
+
+  <div class="structured-data">
+    <div class="business-name text-center"></div>
+    <div class="text-center">
+      <span class="business-type-heading"></span>
+      <span class="business-type"></span>
+      <span class="business-type-percentage"></span>
+    </div>
+    <div class="categories"></div>
+  </div>
+</div>
+
+<div id="ticker-content" class="col-md-3 right-page-content">
+  <div class="right-page-content-heading">
+    Popular Sites
+  </div>
+
+  <div class="row popular-site first-site">
+    <div class="col-md-3">
+      <img src="/static/images/logos/abercrombie-and-fitch-logo.png" alt="" width="100%" height="30px"/>
+    </div>
+    <div class="col-md-9">
+      Abercrombie and Fitch
+    </div>
+  </div>
+
+  <div class="row popular-site">
+    <div class="col-md-3">
+      <img src="/static/images/logos/abercrombie-and-fitch-logo.png" alt="" width="100%" height="30px"/>
+    </div>
+    <div class="col-md-9">
+      Abercrombie and Fitch
+    </div>
+  </div>
+
+  <div class="row popular-site">
+    <div class="col-md-3">
+      <img src="/static/images/logos/abercrombie-and-fitch-logo.png" alt="" width="100%" height="30px"/>
+    </div>
+    <div class="col-md-9">
+      Abercrombie and Fitch
+    </div>
+  </div>
+
+  <div class="row popular-site">
+    <div class="col-md-3">
+      <img src="/static/images/logos/abercrombie-and-fitch-logo.png" alt="" width="100%" height="30px"/>
+    </div>
+    <div class="col-md-9">
+      Abercrombie and Fitch
+    </div>
+  </div>
+
+  <div class="row popular-site">
+    <div class="col-md-3">
+      <img src="/static/images/logos/abercrombie-and-fitch-logo.png" alt="" width="100%" height="30px"/>
+    </div>
+    <div class="col-md-9">
+      Abercrombie and Fitch
+    </div>
+  </div>
+
+  <div class="row popular-site">
+    <div class="col-md-3">
+      <img src="/static/images/logos/abercrombie-and-fitch-logo.png" alt="" width="100%" height="30px"/>
+    </div>
+    <div class="col-md-9">
+      Abercrombie and Fitch
+    </div>
+  </div>
+
+  <div class="row popular-site">
+    <div class="col-md-3">
+      <img src="/static/images/logos/abercrombie-and-fitch-logo.png" alt="" width="100%" height="30px"/>
+    </div>
+    <div class="col-md-9">
+      Abercrombie and Fitch
+    </div>
+  </div>
+</div>
 {% endblock %}
