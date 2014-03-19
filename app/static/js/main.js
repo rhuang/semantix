@@ -1,4 +1,3 @@
-// on enter while on search
 $("#search").keyup(function(event){
     var enterKey = 13
     if(event.keyCode == enterKey ){
@@ -6,10 +5,13 @@ $("#search").keyup(function(event){
     }
 });
 
-var categoryData;
+$('.popular-site').click(function(){
+    var url = $(this).attr('data-url');
+    $('#search').val(url);
+    $("#search-button").click();
+});
 
-
-$('#search-button').on('click', function(evt){
+$('#search-button').click(function(){
     var spinner = $('#spinner');
     var searchURLError = $('#search-url-error');
     var searchBtn = $('#search-button');
@@ -23,8 +25,13 @@ $('#search-button').on('click', function(evt){
         $(this).closest('.form-group, .navbar-search').removeClass('focus');
         searchEl.attr('disabled', 'disabled');
         searchBtn.attr('disabled','disabled');
-        spinner.removeClass('hide');
 
+        $('.categories').html("");
+        $('.business-name').html("");
+        $('.business-type-heading').html("");
+        $('.business-type').html("");
+        $('.business-type-percentage').html("");
+        spinner.removeClass('hide');
      
         $.get('classify_business', {business_name: JSON.stringify(inputURL)}, function(data){
             data = JSON.parse(data);
@@ -35,6 +42,10 @@ $('#search-button').on('click', function(evt){
                 $('.business-type-heading').html("Business Type: ")
 
                 var businessType = data.type.label;
+                businessType = businessType.replace(/_/g, " ");
+                businessType = businessType.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                    return letter.toUpperCase();
+                });
                 $('.business-type').html(businessType.charAt(0).toUpperCase() + businessType.slice(1) + " | ");
 
                 var probability = data.type.probability * 100;

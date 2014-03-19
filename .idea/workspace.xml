@@ -2,26 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="944909f8-b37b-4eb4-ac33-d2e3032d107f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/fonts/Flat-UI-Icons.eot" afterPath="$PROJECT_DIR$/app/static/fonts/Flat-UI-Icons.eot" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/fonts/Flat-UI-Icons.ttf" afterPath="$PROJECT_DIR$/app/static/fonts/Flat-UI-Icons.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/fonts/Flat-UI-Icons.woff" afterPath="$PROJECT_DIR$/app/static/fonts/Flat-UI-Icons.woff" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/images/exaple-image.jpg" afterPath="$PROJECT_DIR$/app/static/images/exaple-image.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/images/carousel/image-01.jpg" afterPath="$PROJECT_DIR$/app/static/images/carousel/image-01.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/images/carousel/image-02.jpg" afterPath="$PROJECT_DIR$/app/static/images/carousel/image-02.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/images/carousel/image-03.jpg" afterPath="$PROJECT_DIR$/app/static/images/carousel/image-03.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/images/switch/mask-square.png" afterPath="$PROJECT_DIR$/app/static/images/switch/mask-square.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/images/switch/mask.png" afterPath="$PROJECT_DIR$/app/static/images/switch/mask.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/fonts/Flat-UI-Icons.dev.svg" afterPath="$PROJECT_DIR$/app/static/fonts/Flat-UI-Icons.dev.svg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/fonts/Flat-UI-Icons.svg" afterPath="$PROJECT_DIR$/app/static/fonts/Flat-UI-Icons.svg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/bootstrap/css/bootstrap-docs.css" afterPath="$PROJECT_DIR$/app/static/bootstrap/css/bootstrap-docs.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/bootstrap/css/bootstrap.css" afterPath="$PROJECT_DIR$/app/static/bootstrap/css/bootstrap.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/css/flat-ui.css" afterPath="$PROJECT_DIR$/app/static/css/flat-ui.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/fonts/icomoon-session.json" afterPath="$PROJECT_DIR$/app/static/fonts/icomoon-session.json" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/app/static/images/logos/walmart.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/index.html" afterPath="$PROJECT_DIR$/app/templates/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/layout.html" afterPath="$PROJECT_DIR$/app/templates/layout.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/js/main.js" afterPath="$PROJECT_DIR$/app/static/js/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/bootstrap/css/prettify.css" afterPath="$PROJECT_DIR$/app/static/bootstrap/css/prettify.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/css/styles.css" afterPath="$PROJECT_DIR$/app/static/css/styles.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="semantix.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -56,7 +40,7 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="53" selection-start="575" selection-end="575" vertical-scroll-proportion="17.5" vertical-offset="615" max-vertical-offset="2130">
+            <state line="142" column="8" selection-start="4491" selection-end="4491" vertical-scroll-proportion="-31.041666" vertical-offset="1385" max-vertical-offset="2280">
               <folding />
             </state>
           </provider>
@@ -65,7 +49,7 @@
       <file leaf-file-name="styles.css" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/static/css/styles.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="29" selection-start="782" selection-end="789" vertical-scroll-proportion="0.872093" vertical-offset="0" max-vertical-offset="4260">
+            <state line="101" column="22" selection-start="1639" selection-end="1689" vertical-scroll-proportion="0.5155039" vertical-offset="1116" max-vertical-offset="4260">
               <folding />
             </state>
           </provider>
@@ -74,7 +58,7 @@
       <file leaf-file-name="main.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/static/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="17" selection-start="2485" selection-end="2485" vertical-scroll-proportion="0.0" vertical-offset="336" max-vertical-offset="1410">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1590">
               <folding />
             </state>
           </provider>
@@ -359,21 +343,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/static/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="17" selection-start="2485" selection-end="2485" vertical-scroll-proportion="0.0" vertical-offset="336" max-vertical-offset="1410">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1590">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="53" selection-start="575" selection-end="575" vertical-scroll-proportion="17.5" vertical-offset="615" max-vertical-offset="2130">
+        <state line="142" column="8" selection-start="4491" selection-end="4491" vertical-scroll-proportion="-31.041666" vertical-offset="1385" max-vertical-offset="2280">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/static/css/styles.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="29" selection-start="782" selection-end="789" vertical-scroll-proportion="0.872093" vertical-offset="0" max-vertical-offset="4260">
+        <state line="101" column="22" selection-start="1639" selection-end="1689" vertical-scroll-proportion="0.5155039" vertical-offset="1116" max-vertical-offset="4260">
           <folding />
         </state>
       </provider>
