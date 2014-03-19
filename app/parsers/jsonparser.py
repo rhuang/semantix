@@ -60,8 +60,7 @@ def highestFrequency(labels):
 
 
 def populateSoupBusinessType(soup, nbc):
-        
-    #labels = []
+
     soupText = ""
     scriptTags = re.compile(r"[{}\[\]\*>=]")
     if soup is not None:
@@ -70,9 +69,7 @@ def populateSoupBusinessType(soup, nbc):
         soupText = re.sub('[.!;+_]', '', soupText)
         soupText = soupText.strip()
         soupText = ' '.join(soupText.split())
-        return nbc.classify(soupText)
-        #labels.append(nbc.classify(soupText))
-    #return labels
+    return nbc.classify(soupText)
 
 def generateSoupData(data, nbc):
     
@@ -80,7 +77,7 @@ def generateSoupData(data, nbc):
     labels = []
     soups = []
     start_time = time.time()
-
+    businessName = ""
     for line in data:
 
         # stop parsing at MAX_JSON_PARSING_TIME
@@ -109,6 +106,7 @@ def generateSoupData(data, nbc):
     
     label = highestFrequency(labels)
     print "Extracting all HTML and getting biz name/type took " + str((time.time() - start_time))  + " seconds"
+
     soup_data.name = businessName
     soup_data.soups = soups
     soup_data.label = label
@@ -122,24 +120,31 @@ def generateSoupData(data, nbc):
 # Output        - A business type tuple that 
 # Load the line and the value "body".
 # Use the quopri module to decode the qp encoded value of each page.
-def parseData(inputFilePath, fileName):
+def parseData(url):
     
     businessTuple = collections.namedtuple("Business", ["soups", "name", "type"])
     businessTypeTuple = namedtuple('Type', ['label', 'probability'])
 
     nbc = getBusinessClassifier()
 
-    # If the file does not exist make it
-    if os.path.isfile(inputFilePath) != True:
-        print "Using the crawler for " + str(inputFilePath)
-        url = convertFileNameToUrl(fileName)
-        jsonData = crawler.pullJsonEncodedHtml(url)
-        with open(inputFilePath, 'w') as f:
+    # Get a safe file path
+    filePath = os.path.join(settings.APP_DATA_HTML, makeFileSafeURL(url))
+
+    # Some files have a ".txt" appended to the end of it, cover that case
+    if os.path.isfile(filePath + ".txt"):
+        filePath = filePath + ".txt"
+
+    # If the file does not exist, crawl the URL, and make the JSON file
+    if os.path.isfile(filePath) != True:
+        print "Using the crawler for " + str(url)
+        jsonData = crawler.pullJsonEncodedHtml(str(url))
+        print "Saving JSON data at filepath " + str(filePath)
+        with open(filePath, 'w') as f:
             f.write(jsonData)
     
     # If the file does exist open it    
-    with open(inputFilePath) as data:
-        print "JSON crawled data found for" + str(inputFilePath)
+    with open(filePath) as data:
+        print "JSON crawled data found for " + str(url) + " at " + str(filePath)
         soupdata = generateSoupData(data, nbc)    
 
     businessName = soupdata.name
@@ -151,9 +156,18 @@ def parseData(inputFilePath, fileName):
 
     return businessTuple(soupdata.soups, businessName, businessType)
 
+# Make URL safe for saving to file
+def makeFileSafeURL(url):
 
-def convertFileNameToUrl(filename):
-    url = filename.encode('ascii', 'ignore')
-    url = re.sub('_', '.', url)
-    url = "http://www." + url
-    return url
+    # remove http://, https://, www. from the front
+    safeURL = url.replace("http://","").replace("https://","").replace("www.","")
+
+    # remove trailing / if it exists
+    if(safeURL[-1] == "/"):
+        safeURL = safeURL[:-1]
+     
+    # Convert any / or . to underscores since the file system cant handle those symbols
+    # NOTE: since both "/" and "." are converted to /, we dont differentiate between www.url/a.com and www.url.a.com
+    safeURL = safeURL.replace("/","_").replace(".","_")
+
+    return safeURL
