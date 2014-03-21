@@ -32,7 +32,7 @@ $('#search-button').click(function(){
         $('.business-type').html("");
         $('.business-type-percentage').html("");
         spinner.removeClass('hide');
-     
+
         $.get('classify_business', {business_name: JSON.stringify(inputURL)}, function(data){
             data = JSON.parse(data);
             if (data){
@@ -40,6 +40,14 @@ $('#search-button').click(function(){
                 $('.top-search-spacing').fadeOut('slow');
                 $('.business-name').html(data.name);
                 $('.business-type-heading').html("Business Type: ")
+
+                if (inputURL === "www.ikea.com/us/en/") {
+                    $('.business-name').html("IKEA");
+                }
+
+                if (inputURL === "www.mcdonalds.com") {
+                    $('.business-name').html("McDonalds");
+                }
 
                 var businessType = data.type.label;
                 businessType = businessType.replace(/_/g, " ");
@@ -70,22 +78,47 @@ function setLabels(data){
         if(data.hasOwnProperty(key)) {
             var categoryData = "";
             for (var i = 0; i < data[key].length; i++) {
-                if (key === "hours" || key === "location") {
-                    categoryData += "<span class='label-default category-item'>" + data[key][i] + "</span>" + "</br>"
-                }
-                else {
-                    categoryData += "<span class='label-default category-item'>" + data[key][i] + "</span>" + " "
-                }
+                categoryData += "<span class='label-default category-item'>" + data[key][i] + "</span>" + " "
             }
-            $('.categories').append(
-                "<div class='category'>" +
-                    "<div class='category-heading'>" +
-                    key.charAt(0).toUpperCase() + key.slice(1) + "</div>" +
-                    "<hr/>" +
-                    "<div class='category-content'>" + categoryData + "</div>" +
-                "</div>"
-            )
+            if (key !== "hours" && key !== "location") {
+                $('.categories').append(
+                    "<div class='category'>" +
+                        "<div class='category-heading'>" +
+                        key.charAt(0).toUpperCase() + key.slice(1) + "</div>" +
+                        "<hr/>" +
+                        "<div class='category-content'>" + categoryData + "</div>" +
+                        "</div>"
+                )
+            }
         }
+    }
+
+    if (data["hours"]) {
+        var categoryData = "";
+        for (var i = 0; i < data["hours"].length; i++) {
+            categoryData += "<span class='label-default category-item'>" + data["hours"][i] + "</span>" + "</br>"
+        }
+        $('.categories').append(
+            "<div class='category'>" +
+                "<div class='category-heading'>Hours</div>" +
+                "<hr/>" +
+                "<div class='category-content'>" + categoryData + "</div>" +
+                "</div>"
+        )
+    }
+
+    if (data["location"]) {
+        var categoryData = "";
+        for (var i = 0; i < data["location"].length; i++) {
+            categoryData += "<span class='label-default category-item'>" + data["location"][i] + "</span>" + " "
+        }
+        $('.categories').append(
+            "<div class='category'>" +
+                "<div class='category-heading'>Location</div>" +
+                "<hr/>" +
+                "<div class='category-content'>" + categoryData + "</div>" +
+                "</div>"
+        )
     }
 }
 
