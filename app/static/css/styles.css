@@ -38,8 +38,8 @@ body {
     font-size: 27px;
     font-weight: 200;
     text-align: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 21px;
+    padding-bottom: 21px;
     border-width: 1px;
     border-color: #95a5a6;
     color: #ecf0f1;
@@ -276,4 +276,12 @@ hr {
     height: 1px;
     border: 0;
     border-top: 1px solid #7f8c8d;
+}
+
+.text-vertical-center {
+    padding-top: 17px;
+}
+
+.ticker-content-left-spacing {
+    padding-left: 25px;
 }
